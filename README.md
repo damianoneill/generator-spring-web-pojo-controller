@@ -32,6 +32,10 @@ The generator creates a Controller that exposes a collection resource at /orders
 The path is derived from the uncapitalized, pluralized, simple class name of the noun class being managed. 
 It also exposes an item resource for each of the items managed by the repository under the URI template /orders/{id}.
      
+**When extending the Abstract Class you need to include the @RestController annotation in your implementation for it be
+ wired properly by Spring.**
+ 
+ 
 ## References
 
 * http://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html 

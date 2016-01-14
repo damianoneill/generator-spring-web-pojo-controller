@@ -9,11 +9,13 @@ module.exports = yeoman.generators.Base.extend({
       type: 'input',
       name: 'noun',
       message: 'What\'s the name of the noun to be modelled?',
+      store: true,
       default: 'Ethernet'
     }, {
       type: 'input',
       name: 'type',
       message: 'What\'s the type (if primitive, use its wrapper class) of the variable used as an identifier in the noun?',
+      store: true,
       default: 'Integer'
     }, {
       type: 'input',
@@ -25,6 +27,7 @@ module.exports = yeoman.generators.Base.extend({
         }
         return 'The package name you have provided is not a valid Java package name.';
       },
+      store: true,
       default: 'com.btisystems.pronx.ems.ethernet'
     }];
 
