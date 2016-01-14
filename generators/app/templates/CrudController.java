@@ -1,5 +1,7 @@
 package <%= packageName %>;
 
+import org.springframework.http.ResponseEntity;
+
 import java.io.Serializable;
 
 /**
@@ -34,7 +36,7 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @return the noun with the given id or {@literal null} if none found
    * @throws IllegalArgumentException if {@code id} is {@literal null}
    */
-  T _findOne(ID id);
+  ResponseEntity<T> _findOne(ID id);
 
   /**
    * Returns whether an noun with the given id exists.

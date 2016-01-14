@@ -1,5 +1,7 @@
 package <%= packageName %>;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,8 +28,12 @@ public abstract class Abstract<%= noun %>Controller implements CrudController<<%
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.GET)
-    public <%= noun %> _findOne(@PathVariable("id") <%= type %> id) {
-        return findOne(id);
+    public ResponseEntity<<%= noun %>> _findOne(@PathVariable("id") <%= type %> id) {
+        <%= noun %> <%= nounLowercase %> = findOne(id);
+        if (<%= nounLowercase %> == null) {
+            return new ResponseEntity<<%= noun %>>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<<%= noun %>>(<%= nounLowercase %>, HttpStatus.OK);
     }
 
     public abstract <%= noun %> findOne(<%= type %> id);

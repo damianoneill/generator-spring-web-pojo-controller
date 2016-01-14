@@ -14,6 +14,24 @@ And then run it
      $ yo generator-spring-web-pojo-controller
      
      
+# Using the generator
+When running the generator with the following input
+     
+````
+$ yo spring-web-pojo-controller
+? What's the name of the noun to be modelled? Order
+? What's the type (if primitive, use its wrapper class) of the variable used as an identifier in the noun? Long
+? What is your default Java package name? (com.acme.controller)
+````
+
+This generates an set of classes, with a primary abstract class that needs extended with the business logic.
+
+     public abstract class AbstractOrderController extends CrudController<Order, Long> { }
+
+The generator creates a Controller that exposes a collection resource at /orders. 
+The path is derived from the uncapitalized, pluralized, simple class name of the noun class being managed. 
+It also exposes an item resource for each of the items managed by the repository under the URI template /orders/{id}.
+     
 ## References
 
 * http://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html 

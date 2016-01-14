@@ -13,10 +13,13 @@ describe('generator-spring-web-pojo-repository-exporter:app', function () {
 
   it('creates files', function () {
     assert.file([
-      'com/acme/controller/Controller.java'
+      'com/btisystems/pronx/ems/ethernet/Controller.java'
     ]);
     assert.file([
-      'com/acme/controller/CrudController.java'
+      'com/btisystems/pronx/ems/ethernet/CrudController.java'
+    ]);
+    assert.file([
+      'com/btisystems/pronx/ems/ethernet/AbstractEthernetController.java'
     ]);
   });
 });
