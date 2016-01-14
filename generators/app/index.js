@@ -13,7 +13,7 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       type: 'input',
       name: 'type',
-      message: 'What\'s the type of the variable used as an identifier in the noun?',
+      message: 'What\'s the type (if primitive, use its wrapper class) of the variable used as an identifier in the noun?',
       default: 'String'
     }, {
       type: 'input',
