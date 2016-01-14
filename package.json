@@ -1,0 +1,51 @@
+{
+  "name": "generator-spring-web-pojo-controller",
+  "version": "0.0.0",
+  "description": "Spring Web Scaffolding System for POJO based Collections",
+  "homepage": "https://github.com/damianoneill/generator-spring-web-pojo-controller",
+  "license": "MIT",
+  "author": {
+    "name": "Damian ONeill",
+    "email": "",
+    "url": ""
+  },
+  "files": [
+    "generators"
+  ],
+  "main": "generators/index.js",
+  "keywords": [
+    "yeoman-generator",
+    "spring-web",
+    "pojo",
+    "collection",
+    "exporter"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^0.21.1"
+  },
+  "devDependencies": {
+    "yeoman-assert": "^2.0.0",
+    "eslint-config-xo-space": "^0.7.0",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-exclude-gitignore": "^1.0.0",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-mocha": "^2.0.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-nsp": "^2.1.0"
+  },
+  "eslintConfig": {
+    "extends": "xo-space",
+    "env": {
+      "mocha": true
+    }
+  },
+  "repository": "https://github.com/damianoneill/generator-spring-web-pojo-controller.git",
+  "bugs": {
+    "url": "https://github.com/damianoneill/generator-spring-web-pojo-controller/issues"
+  },
+  "scripts": {
+    "prepublish": "gulp prepublish",
+    "test": "gulp"
+  }
+}
