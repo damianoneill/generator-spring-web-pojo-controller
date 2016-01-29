@@ -17,21 +17,18 @@ When running the generator with the following input
      
 ````
 $ yo spring-web-pojo-controller
-? What's the name of the noun to be modelled? Order
-? What's the type (if primitive, use its wrapper class) of the variable used as an identifier in the noun? Long
-? What is your default Java package name? (com.acme.controller)
+? What's the name of the noun to be modelled? Person
+? What's the type (if primitive, use its wrapper class) of the variable used as an identifier in the noun? String
+? What is your default Java package name? (com.example.demo)
 ````
 
-This generates an set of classes, with a primary abstract class that needs extended with the business logic.
+This generates an set of classes, with a service class that needs implemented with the business logic.
 
-     public abstract class AbstractOrderController extends CrudController<Order, Long> { }
+     public class PersonService { }
 
-The generator creates a Controller that exposes a collection resource at /orders. 
+The generator creates a Controller that exposes a collection resource at /persons. 
 The path is derived from the uncapitalized, pluralized, simple class name of the noun class being managed. 
-It also exposes an item resource for each of the items managed by the repository under the URI template /orders/{id}.
-     
-**When extending the Abstract Class you need to include the @RestController annotation in your implementation for it be
- wired properly by Spring.**
+It also exposes an item resource for each of the items managed by the repository under the URI template /persons/{id}.
  
  
 ## Build and compile github project
