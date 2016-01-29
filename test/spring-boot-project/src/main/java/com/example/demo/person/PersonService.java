@@ -27,10 +27,10 @@ public class PersonService {
      * Save iterable.
      *
      * @param <S>       the type parameter
-     * @param persons the persons
+     * @param people the people
      * @return the iterable
      */
-    public <S extends Person> Iterable<S> save(Iterable<S> persons) {
+    public <S extends Person> Iterable<S> save(Iterable<S> people) {
         throw new UnsupportedOperationException();
     }
 
@@ -103,9 +103,9 @@ public class PersonService {
     /**
      * Delete.
      *
-     * @param persons the persons
+     * @param people the people
      */
-    public void delete(Iterable<? extends Person> persons) {
+    public void delete(Iterable<? extends Person> people) {
         throw new UnsupportedOperationException();
     }
 

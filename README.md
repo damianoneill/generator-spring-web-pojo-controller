@@ -24,6 +24,7 @@ $ yo spring-web-pojo-controller
 
 This generates an set of classes, with a service class that needs implemented with the business logic.
 
+     @Service
      public class PersonService { }
 
 The generator creates a Controller that exposes a collection resource at /persons. 

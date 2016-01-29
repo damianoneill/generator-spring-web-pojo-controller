@@ -1,5 +1,6 @@
 'use strict';
 var yeoman = require('yeoman-generator');
+var pluralize = require('pluralize');
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function () {
@@ -50,7 +51,7 @@ module.exports = yeoman.generators.Base.extend({
   writing: function () {
     var packagePath = this.properties.packageName.replace(/\./g, '/');
     var nounLowercase = this.properties.noun.toLowerCase();
-    var nounLowercasePlural = nounLowercase + 's';
+    var nounLowercasePlural = pluralize(nounLowercase);
 
     this.fs.copyTpl(
       this.templatePath('ClientErrorInformation.java'),

@@ -25,18 +25,18 @@ public class PersonController implements CrudController<Person, String> {
     private PersonService personService;
 
     @Override
-    @RequestMapping(value = "/persons", method = RequestMethod.POST)
+    @RequestMapping(value = "/people", method = RequestMethod.POST)
     public <S extends Person> S save(@RequestBody S person) {
         return personService.save(person);
     }
 
     @Override
-    public <S extends Person> Iterable<S> save(Iterable<S> persons) {
-        return personService.save(persons);
+    public <S extends Person> Iterable<S> save(Iterable<S> people) {
+        return personService.save(people);
     }
 
     @Override
-    @RequestMapping(value = "/persons/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/people/{id}", method = RequestMethod.GET)
     public ResponseEntity<Person> findOne(@PathVariable("id") String id) {
         Person person = personService.findOne(id);
         if (person == null) {
@@ -51,7 +51,7 @@ public class PersonController implements CrudController<Person, String> {
     }
 
     @Override
-    @RequestMapping(value = "/persons", method = RequestMethod.GET)
+    @RequestMapping(value = "/people", method = RequestMethod.GET)
     public Iterable<Person> findAll() {
         return personService.findAll();
     }
@@ -67,7 +67,7 @@ public class PersonController implements CrudController<Person, String> {
     }
 
     @Override
-    @RequestMapping(value = "/persons/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/people/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") String id) {
         personService.delete(id);
     }
@@ -78,12 +78,12 @@ public class PersonController implements CrudController<Person, String> {
     }
 
     @Override
-    public void delete(Iterable<? extends Person> persons) {
-        personService.delete(persons);
+    public void delete(Iterable<? extends Person> people) {
+        personService.delete(people);
     }
 
     @Override
-    @RequestMapping(value = "/persons", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/people", method = RequestMethod.DELETE)
     public void deleteAll() {
         personService.deleteAll();
     }
