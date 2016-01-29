@@ -21,5 +21,8 @@ describe('generator-spring-web-pojo-repository-exporter:app', function () {
     assert.file([
       'com/btisystems/pronx/ems/ethernet/EthernetController.java'
     ]);
+    assert.file([
+      'com/btisystems/pronx/ems/ethernet/EthernetService.java'
+    ]);
   });
 });

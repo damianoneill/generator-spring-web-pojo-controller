@@ -74,5 +74,15 @@ module.exports = yeoman.generators.Base.extend({
         type: this.properties.type
       }
     );
+    this.fs.copyTpl(
+      this.templatePath('NounService.java'),
+      this.destinationPath(packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Service.java'), {
+        packageName: this.properties.packageName,
+        noun: this.properties.noun,
+        nounLowercase: nounLowercase,
+        nounLowercasePlural: nounLowercasePlural,
+        type: this.properties.type
+      }
+    );
   }
 });
