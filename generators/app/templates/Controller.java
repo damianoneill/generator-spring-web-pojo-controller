@@ -11,7 +11,6 @@ import java.io.Serializable;
  *
  * @param <T>  the noun the controller manages
  * @param <ID> the type of the id of the noun the controller manages
- * @author Damian ONeill
  * @see CrudController
  */
 public interface Controller<T, ID extends Serializable> {

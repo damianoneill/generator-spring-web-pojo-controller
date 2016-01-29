@@ -11,29 +11,18 @@ import org.springframework.stereotype.Service;
 public class <%= noun %>Service {
 
     /**
-     * Save s.
+     * Create an <%= noun %>.
      *
-     * @param <S>      the type parameter
+     * @param <S>    the type parameter
      * @param <%= nounLowercase %> the <%= nounLowercase %>
      * @return the s
      */
-    public <S extends <%= noun %>> S save(S <%= nounLowercase %>) {
+    public <S extends <%= noun %>> S create(S <%= nounLowercase %>) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Save iterable.
-     *
-     * @param <S>       the type parameter
-     * @param <%= nounLowercasePlural %> the <%= nounLowercasePlural %>
-     * @return the iterable
-     */
-    public <S extends <%= noun %>> Iterable<S> save(Iterable<S> <%= nounLowercasePlural %>) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Find one <%= nounLowercase %>.
+     * Find one <%= noun %>.
      *
      * @param id the id
      * @return the <%= nounLowercase %>
@@ -43,17 +32,7 @@ public class <%= noun %>Service {
     }
 
     /**
-     * Exists boolean.
-     *
-     * @param id the id
-     * @return the boolean
-     */
-    public boolean exists(<%= type %> id) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Find all iterable.
+     * Find all <%= nounLowercasePlural %>.
      *
      * @return the iterable
      */
@@ -62,26 +41,18 @@ public class <%= noun %>Service {
     }
 
     /**
-     * Find all iterable.
+     * Update an <%= noun %>.
      *
-     * @param ids the ids
-     * @return the iterable
+     * @param <S>    the type parameter
+     * @param <%= nounLowercase %> the <%= nounLowercase %>
+     * @return the s
      */
-    public Iterable<<%= noun %>> findAll(Iterable<<%= type %>> ids) {
+    public <S extends <%= noun %>> S update(S <%= nounLowercase %>) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Count long.
-     *
-     * @return the long
-     */
-    public long count() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Delete.
+     * Delete an <%= noun %>.
      *
      * @param id the id
      */
@@ -90,25 +61,7 @@ public class <%= noun %>Service {
     }
 
     /**
-     * Delete.
-     *
-     * @param <%= nounLowercase %> the <%= nounLowercase %>
-     */
-    public void delete(<%= noun %> <%= nounLowercase %>) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Delete.
-     *
-     * @param <%= nounLowercasePlural %> the <%= nounLowercasePlural %>
-     */
-    public void delete(Iterable<? extends <%= noun %>> <%= nounLowercasePlural %>) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Delete all.
+     * Delete all <%= nounLowercasePlural %>.
      */
     public void deleteAll() {
         throw new UnsupportedOperationException();

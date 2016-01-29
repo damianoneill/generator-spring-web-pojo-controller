@@ -26,13 +26,8 @@ public class PersonController implements CrudController<Person, String> {
 
     @Override
     @RequestMapping(value = "/people", method = RequestMethod.POST)
-    public <S extends Person> S save(@RequestBody S person) {
-        return personService.save(person);
-    }
-
-    @Override
-    public <S extends Person> Iterable<S> save(Iterable<S> people) {
-        return personService.save(people);
+    public <S extends Person> S create(@RequestBody S person) {
+        return personService.create(person);
     }
 
     @Override
@@ -46,40 +41,21 @@ public class PersonController implements CrudController<Person, String> {
     }
 
     @Override
-    public boolean exists(String id) {
-        return personService.exists(id);
-    }
-
-    @Override
     @RequestMapping(value = "/people", method = RequestMethod.GET)
     public Iterable<Person> findAll() {
         return personService.findAll();
     }
 
     @Override
-    public Iterable<Person> findAll(Iterable<String> ids) {
-        return personService.findAll(ids);
-    }
-
-    @Override
-    public long count() {
-        return personService.count();
+    @RequestMapping(value = "/people", method = RequestMethod.PUT)
+    public <S extends Person> S update(@RequestBody S person) {
+        return personService.update(person);
     }
 
     @Override
     @RequestMapping(value = "/people/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") String id) {
         personService.delete(id);
-    }
-
-    @Override
-    public void delete(Person person) {
-        personService.delete(person);
-    }
-
-    @Override
-    public void delete(Iterable<? extends Person> people) {
-        personService.delete(people);
     }
 
     @Override

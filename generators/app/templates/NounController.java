@@ -26,13 +26,8 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.POST)
-    public <S extends <%= noun %>> S save(@RequestBody S <%= nounLowercase %>) {
-        return <%= nounLowercase %>Service.save(<%= nounLowercase %>);
-    }
-
-    @Override
-    public <S extends <%= noun %>> Iterable<S> save(Iterable<S> <%= nounLowercasePlural %>) {
-        return <%= nounLowercase %>Service.save(<%= nounLowercasePlural %>);
+    public <S extends <%= noun %>> S create(@RequestBody S <%= nounLowercase %>) {
+        return <%= nounLowercase %>Service.create(<%= nounLowercase %>);
     }
 
     @Override
@@ -46,40 +41,21 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
     }
 
     @Override
-    public boolean exists(<%= type %> id) {
-        return <%= nounLowercase %>Service.exists(id);
-    }
-
-    @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.GET)
     public Iterable<<%= noun %>> findAll() {
         return <%= nounLowercase %>Service.findAll();
     }
 
     @Override
-    public Iterable<<%= noun %>> findAll(Iterable<<%= type %>> ids) {
-        return <%= nounLowercase %>Service.findAll(ids);
-    }
-
-    @Override
-    public long count() {
-        return <%= nounLowercase %>Service.count();
+    @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.PUT)
+    public <S extends <%= noun %>> S update(@RequestBody S <%= nounLowercase %>) {
+        return <%= nounLowercase %>Service.update(<%= nounLowercase %>);
     }
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") <%= type %> id) {
         <%= nounLowercase %>Service.delete(id);
-    }
-
-    @Override
-    public void delete(<%= noun %> <%= nounLowercase %>) {
-        <%= nounLowercase %>Service.delete(<%= nounLowercase %>);
-    }
-
-    @Override
-    public void delete(Iterable<? extends <%= noun %>> <%= nounLowercasePlural %>) {
-        <%= nounLowercase %>Service.delete(<%= nounLowercasePlural %>);
     }
 
     @Override

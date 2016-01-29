@@ -13,29 +13,18 @@ import java.util.Arrays;
 public class PersonService {
 
     /**
-     * Save s.
+     * Create an Person.
      *
-     * @param <S>      the type parameter
+     * @param <S>    the type parameter
      * @param person the person
      * @return the s
      */
-    public <S extends Person> S save(S person) {
+    public <S extends Person> S create(S person) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Save iterable.
-     *
-     * @param <S>       the type parameter
-     * @param people the people
-     * @return the iterable
-     */
-    public <S extends Person> Iterable<S> save(Iterable<S> people) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Find one person.
+     * Find one Person.
      *
      * @param id the id
      * @return the person
@@ -45,17 +34,7 @@ public class PersonService {
     }
 
     /**
-     * Exists boolean.
-     *
-     * @param id the id
-     * @return the boolean
-     */
-    public boolean exists(String id) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Find all iterable.
+     * Find all people.
      *
      * @return the iterable
      */
@@ -64,26 +43,18 @@ public class PersonService {
     }
 
     /**
-     * Find all iterable.
+     * Update an Person.
      *
-     * @param ids the ids
-     * @return the iterable
+     * @param <S>    the type parameter
+     * @param person the person
+     * @return the s
      */
-    public Iterable<Person> findAll(Iterable<String> ids) {
+    public <S extends Person> S update(S person) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Count long.
-     *
-     * @return the long
-     */
-    public long count() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Delete.
+     * Delete an Person.
      *
      * @param id the id
      */
@@ -92,25 +63,7 @@ public class PersonService {
     }
 
     /**
-     * Delete.
-     *
-     * @param person the person
-     */
-    public void delete(Person person) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Delete.
-     *
-     * @param people the people
-     */
-    public void delete(Iterable<? extends Person> people) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Delete all.
+     * Delete all people.
      */
     public void deleteAll() {
         throw new UnsupportedOperationException();
