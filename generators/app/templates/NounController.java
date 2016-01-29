@@ -1,14 +1,18 @@
 package <%= packageName %>.<%= nounLowercase %>;
 
+import <%= packageName %>.ClientErrorInformation;
+import <%= packageName %>.CrudController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import <%= packageName %>.CrudController;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * The <%= noun %> REST Controller.
@@ -82,5 +86,11 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.DELETE)
     public void deleteAll() {
         <%= nounLowercase %>Service.deleteAll();
+    }
+
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<ClientErrorInformation> handleUnsupportedOperationException(HttpServletRequest req, Exception e) {
+        ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
+        return new ResponseEntity<ClientErrorInformation>(error, HttpStatus.NOT_IMPLEMENTED);
     }
 }

@@ -53,6 +53,12 @@ module.exports = yeoman.generators.Base.extend({
     var nounLowercasePlural = nounLowercase + 's';
 
     this.fs.copyTpl(
+      this.templatePath('ClientErrorInformation.java'),
+      this.destinationPath(packagePath + '/ClientErrorInformation.java'), {
+        packageName: this.properties.packageName
+      }
+    );
+    this.fs.copyTpl(
       this.templatePath('Controller.java'),
       this.destinationPath(packagePath + '/Controller.java'), {
         packageName: this.properties.packageName
