@@ -2,6 +2,15 @@
 var yeoman = require('yeoman-generator');
 
 module.exports = yeoman.generators.Base.extend({
+  constructor: function () {
+    yeoman.generators.Base.apply(this, arguments);
+
+    // This method adds support for a `--hateoas` flag
+    this.option('hateoas');
+    // And you can then access it later on this way; e.g.
+    // this.scriptSuffix = (this.options.hateoas ? ".hateoas": ".js");
+  },
+
   prompting: function () {
     var done = this.async();
 
@@ -28,7 +37,7 @@ module.exports = yeoman.generators.Base.extend({
         return 'The package name you have provided is not a valid Java package name.';
       },
       store: true,
-      default: 'com.btisystems.pronx.ems.ethernet'
+      default: 'com.btisystems.pronx.ems'
     }];
 
     this.prompt(prompts, function (props) {
@@ -57,7 +66,7 @@ module.exports = yeoman.generators.Base.extend({
     );
     this.fs.copyTpl(
       this.templatePath('NounController.java'),
-      this.destinationPath(packagePath + '/Abstract' + this.properties.noun + 'Controller.java'), {
+      this.destinationPath(packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Controller.java'), {
         packageName: this.properties.packageName,
         noun: this.properties.noun,
         nounLowercase: nounLowercase,

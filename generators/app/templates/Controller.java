@@ -7,6 +7,8 @@ import java.io.Serializable;
  * <p>
  * Modelled after spring data commons, Repository hierarchy.
  *
+ * This code is auto-generated do not override, instead raise a feature request against the generator tool.
+ *
  * @param <T>  the noun the controller manages
  * @param <ID> the type of the id of the noun the controller manages
  * @author Damian ONeill

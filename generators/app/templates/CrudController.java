@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Interface for generic CRUD operations on a controller for a specific noun.
+ * This code is auto-generated do not override, instead raise a feature request against the generator tool.
  *
  * @author Damian ONeill
  */
@@ -18,7 +19,7 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @param noun
    * @return the saved noun
    */
-  <S extends T> S _save(S noun);
+  <S extends T> S save(S noun);
 
   /**
    * Saves all given nouns.
@@ -27,7 +28,7 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @return the saved nouns
    * @throws IllegalArgumentException in case the given noun is {@literal null}.
    */
-  <S extends T> Iterable<S> _save(Iterable<S> nouns);
+  <S extends T> Iterable<S> save(Iterable<S> nouns);
 
   /**
    * Retrieves an noun by its id.
@@ -36,7 +37,7 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @return the noun with the given id or {@literal null} if none found
    * @throws IllegalArgumentException if {@code id} is {@literal null}
    */
-  ResponseEntity<T> _findOne(ID id);
+  ResponseEntity<T> findOne(ID id);
 
   /**
    * Returns whether an noun with the given id exists.
@@ -45,14 +46,14 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @return true if an noun with the given id exists, {@literal false} otherwise
    * @throws IllegalArgumentException if {@code id} is {@literal null}
    */
-  boolean _exists(ID id);
+  boolean exists(ID id);
 
   /**
    * Returns all instances of the type.
    *
    * @return all nouns
    */
-  Iterable<T> _findAll();
+  Iterable<T> findAll();
 
   /**
    * Returns all instances of the type with the given IDs.
@@ -60,14 +61,14 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @param ids
    * @return
    */
-  Iterable<T> _findAll(Iterable<ID> ids);
+  Iterable<T> findAll(Iterable<ID> ids);
 
   /**
    * Returns the number of nouns available.
    *
    * @return the number of nouns
    */
-  long _count();
+  long count();
 
   /**
    * Deletes the noun with the given id.
@@ -75,7 +76,7 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @param id must not be {@literal null}.
    * @throws IllegalArgumentException in case the given {@code id} is {@literal null}
    */
-  void _delete(ID id);
+  void delete(ID id);
 
   /**
    * Deletes a given noun.
@@ -83,7 +84,7 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @param noun
    * @throws IllegalArgumentException in case the given noun is {@literal null}.
    */
-  void _delete(T noun);
+  void delete(T noun);
 
   /**
    * Deletes the given nouns.
@@ -91,10 +92,10 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @param nouns
    * @throws IllegalArgumentException in case the given {@link Iterable} is {@literal null}.
    */
-  void _delete(Iterable<? extends T> nouns);
+  void delete(Iterable<? extends T> nouns);
 
   /**
    * Deletes all nouns managed by the repository.
    */
-  void _deleteAll();
+  void deleteAll();
 }

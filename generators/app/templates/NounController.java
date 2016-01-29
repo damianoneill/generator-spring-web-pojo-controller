@@ -1,31 +1,38 @@
-package <%= packageName %>;
+package <%= packageName %>.<%= nounLowercase %>;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import <%= packageName %>.CrudController;
 
 /**
  * The <%= noun %> REST Controller.
+ * This code is auto-generated do not override, instead raise a feature request against the generator tool.
  */
-public abstract class Abstract<%= noun %>Controller implements CrudController<<%= noun %>, <%= type %>> {
+public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= type %>> {
+
+    @Autowired
+    private <%= noun %>Service <%= nounLowercase %>Service;
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.POST)
-    public <S extends <%= noun %>> S _save(S <%= nounLowercase %>) {
-        return save(<%= nounLowercase %>);
+    public <S extends <%= noun %>> S save(@RequestBody S <%= nounLowercase %>) {
+        return <%= nounLowercase %>Service.save(<%= nounLowercase %>);
     }
 
     @Override
-    public <S extends <%= noun %>> Iterable<S> _save(Iterable<S> <%= nounLowercasePlural %>) {
-        return save(<%= nounLowercasePlural %>);
+    public <S extends <%= noun %>> Iterable<S> save(Iterable<S> <%= nounLowercasePlural %>) {
+        return <%= nounLowercase %>Service.save(<%= nounLowercasePlural %>);
     }
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.GET)
-    public ResponseEntity<<%= noun %>> _findOne(@PathVariable("id") <%= type %> id) {
-        <%= noun %> <%= nounLowercase %> = findOne(id);
+    public ResponseEntity<<%= noun %>> findOne(@PathVariable("id") <%= type %> id) {
+        <%= noun %> <%= nounLowercase %> = <%= nounLowercase %>Service.findOne(id);
         if (<%= nounLowercase %> == null) {
             return new ResponseEntity<<%= noun %>>(HttpStatus.NOT_FOUND);
         }
@@ -33,56 +40,44 @@ public abstract class Abstract<%= noun %>Controller implements CrudController<<%
     }
 
     @Override
-    public boolean _exists(<%= type %> id) {
-        return exists(id);
+    public boolean exists(<%= type %> id) {
+        return <%= nounLowercase %>Service.exists(id);
     }
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.GET)
-    public Iterable<<%= noun %>> _findAll() {
-        return findAll();
+    public Iterable<<%= noun %>> findAll() {
+        return <%= nounLowercase %>Service.findAll();
     }
 
     @Override
-    public Iterable<<%= noun %>> _findAll(Iterable<<%= type %>> ids) {
-        return findAll(ids);
+    public Iterable<<%= noun %>> findAll(Iterable<<%= type %>> ids) {
+        return <%= nounLowercase %>Service.findAll(ids);
     }
 
     @Override
-    public long _count() {
-        return count();
+    public long count() {
+        return <%= nounLowercase %>Service.count();
     }
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.DELETE)
-    public void _delete(@PathVariable("id") <%= type %> id) {
-        delete(id);
+    public void delete(@PathVariable("id") <%= type %> id) {
+        <%= nounLowercase %>Service.delete(id);
     }
 
     @Override
-    public void _delete(<%= noun %> <%= nounLowercase %>) {
-        delete(<%= nounLowercase %>);
+    public void delete(<%= noun %> <%= nounLowercase %>) {
+        <%= nounLowercase %>Service.delete(<%= nounLowercase %>);
     }
 
     @Override
-    public void _delete(Iterable<? extends <%= noun %>> <%= nounLowercasePlural %>) {
-        delete(<%= nounLowercasePlural %>);
+    public void delete(Iterable<? extends <%= noun %>> <%= nounLowercasePlural %>) {
+        <%= nounLowercase %>Service.delete(<%= nounLowercasePlural %>);
     }
 
     @Override
-    public void _deleteAll() {
-        deleteAll();
+    public void deleteAll() {
+        <%= nounLowercase %>Service.deleteAll();
     }
-
-    public abstract <S extends <%= noun %>> S save(S <%= nounLowercase %>);
-    public abstract <S extends <%= noun %>> Iterable<S> save(Iterable<S> <%= nounLowercasePlural %>);
-    public abstract <%= noun %> findOne(<%= type %> id);
-    public abstract boolean exists(<%= type %> id);
-    public abstract Iterable<<%= noun %>> findAll();
-    public abstract Iterable<<%= noun %>> findAll(Iterable<<%= type %>> ids);
-    public abstract long count();
-    public abstract void delete(<%= type %> id);
-    public abstract void delete(<%= noun %> <%= nounLowercase %>);
-    public abstract void delete(Iterable<? extends <%= noun %>> <%= nounLowercasePlural %>);
-    public abstract void deleteAll();
 }
