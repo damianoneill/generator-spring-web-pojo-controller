@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import <%= packageName %>.CrudController;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The <%= noun %> REST Controller.
  * This code is auto-generated do not override, instead raise a feature request against the generator tool.
  */
+@RestController
 public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= type %>> {
 
     @Autowired
@@ -77,6 +79,7 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
     }
 
     @Override
+    @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.DELETE)
     public void deleteAll() {
         <%= nounLowercase %>Service.deleteAll();
     }

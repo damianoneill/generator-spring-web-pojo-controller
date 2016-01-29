@@ -13,16 +13,16 @@ describe('generator-spring-web-pojo-repository-exporter:app', function () {
 
   it('creates files', function () {
     assert.file([
-      'com/btisystems/pronx/ems/Controller.java'
+      'com/example/demo/Controller.java'
     ]);
     assert.file([
-      'com/btisystems/pronx/ems/CrudController.java'
+      'com/example/demo/CrudController.java'
     ]);
     assert.file([
-      'com/btisystems/pronx/ems/ethernet/EthernetController.java'
+      'com/example/demo/person/PersonController.java'
     ]);
     assert.file([
-      'com/btisystems/pronx/ems/ethernet/EthernetService.java'
+      'com/example/demo/person/PersonService.java'
     ]);
   });
 });

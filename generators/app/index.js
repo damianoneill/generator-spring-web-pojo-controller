@@ -19,13 +19,13 @@ module.exports = yeoman.generators.Base.extend({
       name: 'noun',
       message: 'What\'s the name of the noun to be modelled?',
       store: true,
-      default: 'Ethernet'
+      default: 'Person'
     }, {
       type: 'input',
       name: 'type',
       message: 'What\'s the type (if primitive, use its wrapper class) of the variable used as an identifier in the noun?',
       store: true,
-      default: 'Integer'
+      default: 'String'
     }, {
       type: 'input',
       name: 'packageName',
@@ -37,7 +37,7 @@ module.exports = yeoman.generators.Base.extend({
         return 'The package name you have provided is not a valid Java package name.';
       },
       store: true,
-      default: 'com.btisystems.pronx.ems'
+      default: 'com.example.demo'
     }];
 
     this.prompt(prompts, function (props) {

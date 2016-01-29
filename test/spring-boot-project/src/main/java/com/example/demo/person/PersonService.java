@@ -1,23 +1,25 @@
-package <%= packageName %>.<%= nounLowercase %>;
+package com.example.demo.person;
 
 
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 
 /**
- * The <%= noun %> service class, this should be implemented by the user of the tool.
+ * The Person service class, this should be implemented by the user of the tool.
  */
 @Service
-public class <%= noun %>Service {
+public class PersonService {
 
     /**
      * Save s.
      *
      * @param <S>      the type parameter
-     * @param <%= nounLowercase %> the <%= nounLowercase %>
+     * @param person the person
      * @return the s
      */
-    public <S extends <%= noun %>> S save(S <%= nounLowercase %>) {
+    public <S extends Person> S save(S person) {
         throw new UnsupportedOperationException();
     }
 
@@ -25,20 +27,20 @@ public class <%= noun %>Service {
      * Save iterable.
      *
      * @param <S>       the type parameter
-     * @param <%= nounLowercasePlural %> the <%= nounLowercasePlural %>
+     * @param persons the persons
      * @return the iterable
      */
-    public <S extends <%= noun %>> Iterable<S> save(Iterable<S> <%= nounLowercasePlural %>) {
+    public <S extends Person> Iterable<S> save(Iterable<S> persons) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Find one <%= nounLowercase %>.
+     * Find one person.
      *
      * @param id the id
-     * @return the <%= nounLowercase %>
+     * @return the person
      */
-    public <%= noun %> findOne(<%= type %> id) {
+    public Person findOne(String id) {
         throw new UnsupportedOperationException();
     }
 
@@ -48,7 +50,7 @@ public class <%= noun %>Service {
      * @param id the id
      * @return the boolean
      */
-    public boolean exists(<%= type %> id) {
+    public boolean exists(String id) {
         throw new UnsupportedOperationException();
     }
 
@@ -57,8 +59,8 @@ public class <%= noun %>Service {
      *
      * @return the iterable
      */
-    public Iterable<<%= noun %>> findAll() {
-        throw new UnsupportedOperationException();
+    public Iterable<Person> findAll() {
+        return Arrays.asList(new Person().builder().name("Damian ONeill").age(43).email("damian@example.com").build());
     }
 
     /**
@@ -67,7 +69,7 @@ public class <%= noun %>Service {
      * @param ids the ids
      * @return the iterable
      */
-    public Iterable<<%= noun %>> findAll(Iterable<<%= type %>> ids) {
+    public Iterable<Person> findAll(Iterable<String> ids) {
         throw new UnsupportedOperationException();
     }
 
@@ -85,25 +87,25 @@ public class <%= noun %>Service {
      *
      * @param id the id
      */
-    public void delete(<%= type %> id) {
+    public void delete(String id) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Delete.
      *
-     * @param <%= nounLowercase %> the <%= nounLowercase %>
+     * @param person the person
      */
-    public void delete(<%= noun %> <%= nounLowercase %>) {
+    public void delete(Person person) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Delete.
      *
-     * @param <%= nounLowercasePlural %> the <%= nounLowercasePlural %>
+     * @param persons the persons
      */
-    public void delete(Iterable<? extends <%= noun %>> <%= nounLowercasePlural %>) {
+    public void delete(Iterable<? extends Person> persons) {
         throw new UnsupportedOperationException();
     }
 
