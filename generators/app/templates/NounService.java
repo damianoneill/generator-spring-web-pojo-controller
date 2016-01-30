@@ -3,6 +3,7 @@ package <%= packageName %>.<%= nounLowercase %>;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 /**
  * The <%= noun %> service class, this should be implemented by the user of the tool.
@@ -34,9 +35,9 @@ public class <%= noun %>Service {
     /**
      * Find all <%= nounLowercasePlural %>.
      *
-     * @return the iterable
+     * @return the list
      */
-    public Iterable<<%= noun %>> findAll() {
+    public List<<%= noun %>> findAll() {
         throw new UnsupportedOperationException();
     }
 

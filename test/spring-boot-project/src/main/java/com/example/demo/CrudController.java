@@ -3,6 +3,7 @@ package com.example.demo;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Interface for generic CRUD operations on a controller for a specific noun.
@@ -33,7 +34,17 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    *
    * @return all nouns
    */
-  Iterable<T> findAll();
+  List<T> findAll();
+
+
+  /**
+   * Returns a paginated list of the instance type.
+   *
+   * @param page the page
+   * @param size the size
+   * @return the list
+   */
+  List<T> findPaginated(int page, int size);
 
   /**
    * Updates a given noun. Use the returned instance for further operations as the update operation might have

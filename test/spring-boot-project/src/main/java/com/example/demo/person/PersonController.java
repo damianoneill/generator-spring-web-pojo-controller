@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The Person REST Controller.
@@ -42,8 +46,15 @@ public class PersonController implements CrudController<Person, String> {
 
     @Override
     @RequestMapping(value = "/people", method = RequestMethod.GET)
-    public Iterable<Person> findAll() {
+    public List<Person> findAll() {
         return personService.findAll();
+    }
+
+    @Override
+    @RequestMapping(value = "/people", params = {"page", "size"}, method = RequestMethod.GET)
+    public List<Person> findPaginated(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return personService.findAll()
+                .stream().skip(page * size).limit(size).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

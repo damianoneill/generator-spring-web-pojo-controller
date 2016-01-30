@@ -4,7 +4,7 @@ package com.example.demo.person;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-
+import java.util.List;
 
 /**
  * The Person service class, this should be implemented by the user of the tool.
@@ -36,9 +36,9 @@ public class PersonService {
     /**
      * Find all people.
      *
-     * @return the iterable
+     * @return the list
      */
-    public Iterable<Person> findAll() {
+    public List<Person> findAll() {
         return Arrays.asList(new Person().builder().name("Damian ONeill").age(43).email("damian@example.com").build());
     }
 
