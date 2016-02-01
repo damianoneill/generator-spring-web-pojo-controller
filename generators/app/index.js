@@ -28,6 +28,29 @@ module.exports = yeoman.generators.Base.extend({
       store: true,
       default: 'String'
     }, {
+      type: 'confirm',
+      name: 'filterYesNo',
+      message: 'Would you like to apply a filter to the Nouns collection find methods?',
+      store: true
+    }, {
+      when: function (response) {
+        return response.filterYesNo;
+      },
+      type: 'input',
+      name: 'filterName',
+      message: 'What\'s the name of the variable used as an filter in the noun\'s collection?',
+      store: true,
+      default: 'age'
+    }, {
+      when: function (response) {
+        return response.filterYesNo;
+      },
+      type: 'input',
+      name: 'filterType',
+      message: 'What\'s the type (if primitive, use its wrapper class) of the variable used as an filter in the noun\'s collection?',
+      store: true,
+      default: 'Integer'
+    }, {
       type: 'input',
       name: 'packageName',
       message: 'What is your default Java package name?',
@@ -60,6 +83,8 @@ module.exports = yeoman.generators.Base.extend({
     var nounLowercase = this.properties.noun.toLowerCase();
     var nounLowercasePlural = pluralize(nounLowercase);
 
+    console.log(srcDir + packagePath + '/ClientErrorInformation.java');
+
     this.fs.copyTpl(
       this.templatePath('ClientErrorInformation.java'),
       this.destinationPath(srcDir + packagePath + '/ClientErrorInformation.java'), {
@@ -79,7 +104,9 @@ module.exports = yeoman.generators.Base.extend({
         noun: this.properties.noun,
         nounLowercase: nounLowercase,
         nounLowercasePlural: nounLowercasePlural,
-        type: this.properties.type
+        type: this.properties.type,
+        filterName: this.properties.filterName,
+        filterType: this.properties.filterType
       }
     );
     this.fs.copyTpl(

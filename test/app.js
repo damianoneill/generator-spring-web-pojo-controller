@@ -3,11 +3,11 @@ var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-generator').test;
 
-describe('generator-spring-web-pojo-repository-exporter:app', function () {
+describe('generator-spring-web-pojo-controller:app', function () {
   before(function (done) {
     helpers.run(path.join(__dirname, '../generators/app'))
       .withOptions({someOption: true})
-      .withPrompts({someAnswer: true})
+      .withPrompts({packageName: 'com.example.demo', noun: 'Person'})
       .on('end', done);
   });
 
