@@ -16,9 +16,6 @@ describe('generator-spring-web-pojo-repository-exporter:app', function () {
       'com/example/demo/ClientErrorInformation.java'
     ]);
     assert.file([
-      'com/example/demo/Controller.java'
-    ]);
-    assert.file([
       'com/example/demo/CrudController.java'
     ]);
     assert.file([

@@ -10,7 +10,7 @@ import java.util.List;
  * This code is auto-generated do not override, instead raise a feature request against the generator tool.
  *
  */
-public interface CrudController<T, ID extends Serializable> extends Controller<T, ID> {
+public interface CrudController<T, ID extends Serializable> {
 
   /**
    * Creates a given noun. Use the returned instance for further operations as the create operation might have
@@ -19,7 +19,7 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @param noun
    * @return the created noun
    */
-  <S extends T> S create(S noun);
+  T create(T noun);
 
   /**
    * Retrieves an noun by its id.
@@ -53,7 +53,7 @@ public interface CrudController<T, ID extends Serializable> extends Controller<T
    * @param noun
    * @return the updated noun
    */
-  <S extends T> S update(S noun);
+  T update(T noun);
 
   /**
    * Deletes the noun with the given id.

@@ -50,9 +50,9 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: function () {
     var srcDir = './';
-    //var testDir = './';
+    // var testDir = './';
     if (this.options.maven) {
-      console.log("Using Maven directory structure ...");
+      console.log('Using Maven directory structure ...');
       srcDir = 'src/main/java/';
     }
 
@@ -63,12 +63,6 @@ module.exports = yeoman.generators.Base.extend({
     this.fs.copyTpl(
       this.templatePath('ClientErrorInformation.java'),
       this.destinationPath(srcDir + packagePath + '/ClientErrorInformation.java'), {
-        packageName: this.properties.packageName
-      }
-    );
-    this.fs.copyTpl(
-      this.templatePath('Controller.java'),
-      this.destinationPath(srcDir + packagePath + '/Controller.java'), {
         packageName: this.properties.packageName
       }
     );

@@ -30,7 +30,7 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.POST)
-    public <S extends <%= noun %>> S create(@RequestBody S <%= nounLowercase %>) {
+    public <%= noun %> create(@RequestBody <%= noun %> <%= nounLowercase %>) {
         return <%= nounLowercase %>Service.create(<%= nounLowercase %>);
     }
 
@@ -62,7 +62,7 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
 
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.PUT)
-    public <S extends <%= noun %>> S update(@RequestBody S <%= nounLowercase %>) {
+    public <%= noun %> update(@RequestBody <%= noun %> <%= nounLowercase %>) {
         return <%= nounLowercase %>Service.update(<%= nounLowercase %>);
     }
 

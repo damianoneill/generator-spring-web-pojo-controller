@@ -30,7 +30,7 @@ public class PersonController implements CrudController<Person, String> {
 
     @Override
     @RequestMapping(value = "/people", method = RequestMethod.POST)
-    public <S extends Person> S create(@RequestBody S person) {
+    public Person create(@RequestBody Person person) {
         return personService.create(person);
     }
 
@@ -50,6 +50,9 @@ public class PersonController implements CrudController<Person, String> {
         return personService.findAll();
     }
 
+    /**
+     * For e.g. http://localhost:8080/people?page=0&size=2
+     */
     @Override
     @RequestMapping(value = "/people", params = {"page", "size"}, method = RequestMethod.GET)
     public List<Person> findPaginated(@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -59,7 +62,7 @@ public class PersonController implements CrudController<Person, String> {
 
     @Override
     @RequestMapping(value = "/people", method = RequestMethod.PUT)
-    public <S extends Person> S update(@RequestBody S person) {
+    public Person update(@RequestBody Person person) {
         return personService.update(person);
     }
 

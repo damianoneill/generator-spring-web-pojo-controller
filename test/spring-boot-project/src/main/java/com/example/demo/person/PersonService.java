@@ -3,7 +3,6 @@ package com.example.demo.person;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,7 +38,7 @@ public class PersonService {
      * @return the list
      */
     public List<Person> findAll() {
-        return Arrays.asList(new Person().builder().name("Damian ONeill").age(43).email("damian@example.com").build());
+        throw new UnsupportedOperationException();
     }
 
     /**
