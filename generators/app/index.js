@@ -6,10 +6,10 @@ module.exports = yeoman.generators.Base.extend({
   constructor: function () {
     yeoman.generators.Base.apply(this, arguments);
 
-    // This method adds support for a `--hateoas` flag
-    this.option('hateoas');
+    // This method adds support for outputing into a maven directory structure `--maven` flag
+    this.option('maven');
     // And you can then access it later on this way; e.g.
-    // this.scriptSuffix = (this.options.hateoas ? ".hateoas": ".js");
+    // this.scriptSuffix = (this.options.maven ? ".maven": ".notmaven");
   },
 
   prompting: function () {
@@ -49,31 +49,38 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   writing: function () {
+    var srcDir = './';
+    //var testDir = './';
+    if (this.options.maven) {
+      console.log("Using Maven directory structure ...");
+      srcDir = 'src/main/java/';
+    }
+
     var packagePath = this.properties.packageName.replace(/\./g, '/');
     var nounLowercase = this.properties.noun.toLowerCase();
     var nounLowercasePlural = pluralize(nounLowercase);
 
     this.fs.copyTpl(
       this.templatePath('ClientErrorInformation.java'),
-      this.destinationPath(packagePath + '/ClientErrorInformation.java'), {
+      this.destinationPath(srcDir + packagePath + '/ClientErrorInformation.java'), {
         packageName: this.properties.packageName
       }
     );
     this.fs.copyTpl(
       this.templatePath('Controller.java'),
-      this.destinationPath(packagePath + '/Controller.java'), {
+      this.destinationPath(srcDir + packagePath + '/Controller.java'), {
         packageName: this.properties.packageName
       }
     );
     this.fs.copyTpl(
       this.templatePath('CrudController.java'),
-      this.destinationPath(packagePath + '/CrudController.java'), {
+      this.destinationPath(srcDir + packagePath + '/CrudController.java'), {
         packageName: this.properties.packageName
       }
     );
     this.fs.copyTpl(
       this.templatePath('NounController.java'),
-      this.destinationPath(packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Controller.java'), {
+      this.destinationPath(srcDir + packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Controller.java'), {
         packageName: this.properties.packageName,
         noun: this.properties.noun,
         nounLowercase: nounLowercase,
@@ -83,7 +90,7 @@ module.exports = yeoman.generators.Base.extend({
     );
     this.fs.copyTpl(
       this.templatePath('NounService.java'),
-      this.destinationPath(packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Service.java'), {
+      this.destinationPath(srcDir + packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Service.java'), {
         packageName: this.properties.packageName,
         noun: this.properties.noun,
         nounLowercase: nounLowercase,
