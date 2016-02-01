@@ -14,11 +14,10 @@ public class PersonService {
     /**
      * Create an Person.
      *
-     * @param <S>    the type parameter
      * @param person the person
-     * @return the s
+     * @return the person
      */
-    public <S extends Person> S create(S person) {
+    public Person create(Person person) {
         throw new UnsupportedOperationException();
     }
 
@@ -44,11 +43,10 @@ public class PersonService {
     /**
      * Update an Person.
      *
-     * @param <S>    the type parameter
      * @param person the person
-     * @return the s
+     * @return the person
      */
-    public <S extends Person> S update(S person) {
+    public Person update(Person person) {
         throw new UnsupportedOperationException();
     }
 

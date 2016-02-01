@@ -14,11 +14,10 @@ public class <%= noun %>Service {
     /**
      * Create an <%= noun %>.
      *
-     * @param <S>    the type parameter
      * @param <%= nounLowercase %> the <%= nounLowercase %>
-     * @return the s
+     * @return the <%= nounLowercase %>
      */
-    public <S extends <%= noun %>> S create(S <%= nounLowercase %>) {
+    public <%= noun %> create(<%= noun %> <%= nounLowercase %>) {
         throw new UnsupportedOperationException();
     }
 
@@ -44,11 +43,10 @@ public class <%= noun %>Service {
     /**
      * Update an <%= noun %>.
      *
-     * @param <S>    the type parameter
      * @param <%= nounLowercase %> the <%= nounLowercase %>
-     * @return the s
+     * @return the <%= nounLowercase %>
      */
-    public <S extends <%= noun %>> S update(S <%= nounLowercase %>) {
+    public <%= noun %> update(<%= noun %> <%= nounLowercase %>) {
         throw new UnsupportedOperationException();
     }
 
