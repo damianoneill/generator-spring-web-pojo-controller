@@ -27,4 +27,4 @@ build/Release
 node_modules
 
 .idea
-generator-spring-web-pojo-repository-exporter.iml
+*.iml
