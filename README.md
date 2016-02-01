@@ -1,5 +1,5 @@
 # generator-spring-web-pojo-controller
-Spring Web Scaffolding System for a Pojo based Controller
+Spring Web Scaffolding System for a Collection Pojo based Controller
 
 ## Setup
    
@@ -47,6 +47,4 @@ And then run it
  
 ## References
 
-* http://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html 
-* http://docs.spring.io/spring-data/rest/docs/current/reference/html/#repository-resources 
      
