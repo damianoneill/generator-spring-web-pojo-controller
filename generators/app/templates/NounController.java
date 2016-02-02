@@ -78,6 +78,9 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
         <%= nounLowercase %>Service.deleteAll();
     }
 
+    <%- include snippets/NounController-with-filter.ejs -%>
+
+
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperationException(HttpServletRequest req, Exception e) {
         ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());

@@ -83,8 +83,6 @@ module.exports = yeoman.generators.Base.extend({
     var nounLowercase = this.properties.noun.toLowerCase();
     var nounLowercasePlural = pluralize(nounLowercase);
 
-    console.log(srcDir + packagePath + '/ClientErrorInformation.java');
-
     this.fs.copyTpl(
       this.templatePath('ClientErrorInformation.java'),
       this.destinationPath(srcDir + packagePath + '/ClientErrorInformation.java'), {
@@ -106,7 +104,8 @@ module.exports = yeoman.generators.Base.extend({
         nounLowercasePlural: nounLowercasePlural,
         type: this.properties.type,
         filterName: this.properties.filterName,
-        filterType: this.properties.filterType
+        filterType: this.properties.filterType,
+        filterYesNo: this.properties.filterYesNo
       }
     );
     this.fs.copyTpl(
