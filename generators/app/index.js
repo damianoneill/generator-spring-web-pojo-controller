@@ -90,12 +90,6 @@ module.exports = yeoman.generators.Base.extend({
       }
     );
     this.fs.copyTpl(
-      this.templatePath('CrudController.java'),
-      this.destinationPath(srcDir + packagePath + '/CrudController.java'), {
-        packageName: this.properties.packageName
-      }
-    );
-    this.fs.copyTpl(
       this.templatePath('NounController.java'),
       this.destinationPath(srcDir + packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Controller.java'), {
         packageName: this.properties.packageName,
