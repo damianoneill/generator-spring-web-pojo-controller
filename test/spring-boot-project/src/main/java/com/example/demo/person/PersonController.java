@@ -78,7 +78,6 @@ public class PersonController {
         ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
         return new ResponseEntity<>(error, HttpStatus.NOT_IMPLEMENTED);
     }
-
         
     /**
      * For e.g. http://localhost:8080/people?filter=...
