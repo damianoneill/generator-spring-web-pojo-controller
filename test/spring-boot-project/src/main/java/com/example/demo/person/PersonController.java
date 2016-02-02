@@ -28,8 +28,8 @@ public class PersonController {
     private PersonService personService;
 
     @RequestMapping(value = "/people", method = RequestMethod.POST)
-    public Person create(@RequestBody Person person) {
-        return personService.create(person);
+    public ResponseEntity<Person> create(@RequestBody Person person) {
+        return new ResponseEntity<>(personService.create(person), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.GET)
@@ -42,32 +42,35 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/people", method = RequestMethod.GET)
-    public List<Person> findAll() {
-        return personService.findAll();
+    public ResponseEntity<List<Person>> findAll() {
+        return new ResponseEntity<>(personService.findAll(), HttpStatus.OK);
     }
 
     /**
      * For e.g. http://localhost:8080/people?page=0&size=2
      */
     @RequestMapping(value = "/people", params = {"page", "size"}, method = RequestMethod.GET)
-    public List<Person> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
-        return personService.findAll()
+    public ResponseEntity<List<Person>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
+        List<Person> pagedList = personService.findAll()
                 .stream().skip(page * size).limit(size).collect(Collectors.toCollection(ArrayList::new));
+        return new ResponseEntity<>(pagedList, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/people", method = RequestMethod.PUT)
-    public Person update(@RequestBody Person person) {
-        return personService.update(person);
+    public ResponseEntity<Person> update(@RequestBody Person person) {
+        return new ResponseEntity<>(personService.update(person), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") String id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         personService.delete(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/people", method = RequestMethod.DELETE)
-    public void deleteAll() {
+    public ResponseEntity<Void> deleteAll() {
         personService.deleteAll();
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
@@ -77,4 +80,14 @@ public class PersonController {
     }
 
         
+    /**
+     * For e.g. http://localhost:8080/people?filter=...
+     */
+    @RequestMapping(value = "/people", params = {"filter"}, method = RequestMethod.GET)
+    public ResponseEntity<List<Person>> findFiltered(@RequestParam("filter") String filter) {
+        List<Person> filteredList = personService.findAll()
+                .stream().filter(p -> p.getEmail().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
+        return new ResponseEntity<>(filteredList, HttpStatus.OK);
+    }
+    
 }

@@ -21,5 +21,8 @@ describe('generator-spring-web-pojo-controller:app', function () {
     assert.file([
       'com/example/demo/person/PersonService.java'
     ]);
+    assert.file([
+      'com/example/demo/person/PersonControllerTestDocumentation.java'
+    ]);
   });
 });

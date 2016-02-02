@@ -3,8 +3,9 @@
      * For e.g. http://localhost:8080/<%= nounLowercasePlural %>?filter=...
      */
     @RequestMapping(value = "/<%= nounLowercasePlural %>", params = {"filter"}, method = RequestMethod.GET)
-    public List<<%= noun %>> findFiltered(@RequestParam("filter") String filter) {
-        return <%= nounLowercase %>Service.findAll()
+    public ResponseEntity<List<<%= noun %>>> findFiltered(@RequestParam("filter") String filter) {
+        List<<%= noun %>> filteredList = <%= nounLowercase %>Service.findAll()
                 .stream().filter(p -> p.getEmail().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
+        return new ResponseEntity<>(filteredList, HttpStatus.OK);
     }
     <% } %>

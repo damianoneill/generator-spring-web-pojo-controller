@@ -28,8 +28,8 @@ public class <%= noun %>Controller {
     private <%= noun %>Service <%= nounLowercase %>Service;
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.POST)
-    public <%= noun %> create(@RequestBody <%= noun %> <%= nounLowercase %>) {
-        return <%= nounLowercase %>Service.create(<%= nounLowercase %>);
+    public ResponseEntity<<%= noun %>> create(@RequestBody <%= noun %> <%= nounLowercase %>) {
+        return new ResponseEntity<>(<%= nounLowercase %>Service.create(<%= nounLowercase %>), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.GET)
@@ -42,32 +42,35 @@ public class <%= noun %>Controller {
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.GET)
-    public List<<%= noun %>> findAll() {
-        return <%= nounLowercase %>Service.findAll();
+    public ResponseEntity<List<<%= noun %>>> findAll() {
+        return new ResponseEntity<>(<%= nounLowercase %>Service.findAll(), HttpStatus.OK);
     }
 
     /**
      * For e.g. http://localhost:8080/<%= nounLowercasePlural %>?page=0&size=2
      */
     @RequestMapping(value = "/<%= nounLowercasePlural %>", params = {"page", "size"}, method = RequestMethod.GET)
-    public List<<%= noun %>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
-        return <%= nounLowercase %>Service.findAll()
+    public ResponseEntity<List<<%= noun %>>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
+        List<<%= noun %>> pagedList = <%= nounLowercase %>Service.findAll()
                 .stream().skip(page * size).limit(size).collect(Collectors.toCollection(ArrayList::new));
+        return new ResponseEntity<>(pagedList, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.PUT)
-    public <%= noun %> update(@RequestBody <%= noun %> <%= nounLowercase %>) {
-        return <%= nounLowercase %>Service.update(<%= nounLowercase %>);
+    public ResponseEntity<<%= noun %>> update(@RequestBody <%= noun %> <%= nounLowercase %>) {
+        return new ResponseEntity<>(<%= nounLowercase %>Service.update(<%= nounLowercase %>), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") <%= type %> id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") <%= type %> id) {
         <%= nounLowercase %>Service.delete(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.DELETE)
-    public void deleteAll() {
+    public ResponseEntity<Void> deleteAll() {
         <%= nounLowercase %>Service.deleteAll();
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
