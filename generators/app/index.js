@@ -73,13 +73,15 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: function () {
     var srcDir = './';
-    // var testDir = './';
+    var testDir = './';
     if (this.options.maven) {
       console.log('Using Maven directory structure ...');
       srcDir = 'src/main/java/';
+      testDir = 'src/test/java/';
     }
 
     var packagePath = this.properties.packageName.replace(/\./g, '/');
+    var nounPlural = pluralize(this.properties.noun);
     var nounLowercase = this.properties.noun.toLowerCase();
     var nounLowercasePlural = pluralize(nounLowercase);
 
@@ -107,6 +109,17 @@ module.exports = yeoman.generators.Base.extend({
       this.destinationPath(srcDir + packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Service.java'), {
         packageName: this.properties.packageName,
         noun: this.properties.noun,
+        nounLowercase: nounLowercase,
+        nounLowercasePlural: nounLowercasePlural,
+        type: this.properties.type
+      }
+    );
+    this.fs.copyTpl(
+      this.templatePath('NounControllerDocumentation.java'),
+      this.destinationPath(testDir + packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'ControllerTestDocumentation.java'), {
+        packageName: this.properties.packageName,
+        noun: this.properties.noun,
+        nounPlural: nounPlural,
         nounLowercase: nounLowercase,
         nounLowercasePlural: nounLowercasePlural,
         type: this.properties.type
