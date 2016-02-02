@@ -78,16 +78,7 @@ public class PersonController implements CrudController<Person, String> {
         personService.deleteAll();
     }
 
-
-    /**
-     * For e.g. http://localhost:8080/people?filter=...
-     */
-    @RequestMapping(value = "/people", params = {"filter"}, method = RequestMethod.GET)
-    public List<Person> findFiltered(@RequestParam("filter") String filter) {
-        return personService.findAll()
-                .stream().filter(p -> p.getEmail().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
-    }
-
+        
 
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperationException(HttpServletRequest req, Exception e) {
