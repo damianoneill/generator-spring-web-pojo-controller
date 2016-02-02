@@ -28,9 +28,21 @@ This generates an set of classes, with a service class that needs implemented wi
      public class PersonService { }
 
 The generator creates a Controller that exposes a collection resource at /persons. 
-The path is derived from the uncapitalized, pluralized, simple class name of the noun class being managed. 
-It also exposes an item resource for each of the items managed by the repository under the URI template /persons/{id}.
- 
+The path is derived from the uncapitalized, pluralized, simple class name of the noun class being managed. For example
+If the Noun is Person the Collection will be people, if the Noun is Ethernet the Collection will be ethernet.
+
+It also exposes an item resource for each of the items managed by the repository under the URI template /people/{id}.
+Below is the interface operations that represent the CRUD operations that gets created by the tool.
+
+````
+T create(T noun);
+ResponseEntity<T> findOne(ID id);
+List<T> findAll();
+List<T> findPaginated(int page, int size);
+T update(T noun);
+void delete(ID id);
+void deleteAll();
+````
  
 ## Build and compile github project
 

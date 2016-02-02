@@ -39,9 +39,9 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
     public ResponseEntity<<%= noun %>> findOne(@PathVariable("id") <%= type %> id) {
         <%= noun %> <%= nounLowercase %> = <%= nounLowercase %>Service.findOne(id);
         if (<%= nounLowercase %> == null) {
-            return new ResponseEntity<<%= noun %>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<<%= noun %>>(<%= nounLowercase %>, HttpStatus.OK);
+        return new ResponseEntity<>(<%= nounLowercase %>, HttpStatus.OK);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
      */
     @Override
     @RequestMapping(value = "/<%= nounLowercasePlural %>", params = {"page", "size"}, method = RequestMethod.GET)
-    public List<<%= noun %>> findPaginated(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public List<<%= noun %>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
         return <%= nounLowercase %>Service.findAll()
                 .stream().skip(page * size).limit(size).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -81,6 +81,6 @@ public class <%= noun %>Controller implements CrudController<<%= noun %>, <%= ty
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperationException(HttpServletRequest req, Exception e) {
         ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
-        return new ResponseEntity<ClientErrorInformation>(error, HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(error, HttpStatus.NOT_IMPLEMENTED);
     }
 }

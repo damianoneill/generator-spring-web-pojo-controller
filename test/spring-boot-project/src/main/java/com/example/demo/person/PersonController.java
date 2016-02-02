@@ -39,9 +39,9 @@ public class PersonController implements CrudController<Person, String> {
     public ResponseEntity<Person> findOne(@PathVariable("id") String id) {
         Person person = personService.findOne(id);
         if (person == null) {
-            return new ResponseEntity<Person>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Person>(person, HttpStatus.OK);
+        return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class PersonController implements CrudController<Person, String> {
      */
     @Override
     @RequestMapping(value = "/people", params = {"page", "size"}, method = RequestMethod.GET)
-    public List<Person> findPaginated(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public List<Person> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
         return personService.findAll()
                 .stream().skip(page * size).limit(size).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -81,6 +81,6 @@ public class PersonController implements CrudController<Person, String> {
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperationException(HttpServletRequest req, Exception e) {
         ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
-        return new ResponseEntity<ClientErrorInformation>(error, HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(error, HttpStatus.NOT_IMPLEMENTED);
     }
 }

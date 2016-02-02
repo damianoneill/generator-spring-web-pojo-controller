@@ -44,7 +44,7 @@ public interface CrudController<T, ID extends Serializable> {
    * @param size the size
    * @return the list
    */
-  List<T> findPaginated(int page, int size);
+  List<T> findPaginated(long page, long size);
 
   /**
    * Updates a given noun. Use the returned instance for further operations as the update operation might have
