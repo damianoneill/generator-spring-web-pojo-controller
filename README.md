@@ -43,7 +43,13 @@ T update(T noun);
 void delete(ID id);
 void deleteAll();
 ````
+
+And optionally 
  
+```` 
+List<T> findFiltered(@RequestParam("filter") T' filter)
+````
+
 ## Build and compile github project
 
      $ npm test
