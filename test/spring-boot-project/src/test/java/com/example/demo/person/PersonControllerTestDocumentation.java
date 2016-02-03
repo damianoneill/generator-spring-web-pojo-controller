@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -164,7 +165,7 @@ public class PersonControllerTestDocumentation {
                          * responseFields((fieldWithPath("[]").description("An array of Persons"))
                          * responseFields((fieldWithPath("[].property").description("The Person property value."))
                          */
-                        responseFields((fieldWithPath("[]").description("An array of Persons"))
+                        responseFields(fieldWithPath("[]").description("An array of Persons")
                         )));
         verify(personService, atLeastOnce()).findAll();
     }
@@ -246,6 +247,35 @@ public class PersonControllerTestDocumentation {
                         )));
 
         verify(personService, atLeastOnce()).update(original);
+    }
+
+    @Test
+    public void deletePerson() throws Exception {
+        this.mockMvc
+                .perform(delete(PATH + "/{id}", "99"))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "{class-name}/{method-name}",
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                             /* TODO - Describe the path parameter. eg;
+                             * parameterWithName("id").description("The name of the Person to retrieve")),
+                             */
+                                parameterWithName("id").description("The name of the Person to delete")
+                        )));
+        verify(personService, atLeastOnce()).delete("99");
+    }
+
+    @Test
+    public void deleteAllPeople() throws Exception {
+        this.mockMvc
+                .perform(delete(PATH))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "{class-name}/{method-name}",
+                        preprocessResponse(prettyPrint())
+                ));
+        verify(personService, atLeastOnce()).deleteAll();
     }
 
     private String prettyPrintRequest(String original) throws IOException {
