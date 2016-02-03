@@ -33,6 +33,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -118,7 +119,7 @@ public class <%= noun %>ControllerTestDocumentation {
         final <%= noun %> expected = new <%= noun %>();
         when(<%= nounLowercase %>Service.findOne(any(<%= type %>.class))).thenReturn(expected);
         this.mockMvc
-            .perform(get(PATH + "/{id}", "invalid"))
+            .perform(get(PATH + "/{id}", "99"))
             .andExpect(status().isOk())
             .andDo(document(
                 "{class-name}/{method-name}",
@@ -248,6 +249,35 @@ public class <%= noun %>ControllerTestDocumentation {
                         )));
 
         verify(<%= nounLowercase %>Service, atLeastOnce()).update(original);
+    }
+
+    @Test
+    public void delete<%= noun %>() throws Exception {
+        this.mockMvc
+                .perform(delete(PATH + "/{id}", "99"))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "{class-name}/{method-name}",
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                             /* TODO - Describe the path parameter. eg;
+                             * parameterWithName("id").description("The name of the <%= noun %> to delete")),
+                             */
+                                parameterWithName("id").description("The name of the <%= noun %> to delete")
+                        )));
+        verify(<%= nounLowercase %>Service, atLeastOnce()).delete("99");
+    }
+
+    @Test
+    public void deleteAll<%= nounPlural %>() throws Exception {
+        this.mockMvc
+                .perform(delete(PATH))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "{class-name}/{method-name}",
+                        preprocessResponse(prettyPrint())
+                ));
+        verify(<%= nounLowercase %>Service, atLeastOnce()).deleteAll();
     }
 
     private String prettyPrintRequest(String original) throws IOException {
