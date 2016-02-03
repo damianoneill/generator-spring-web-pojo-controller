@@ -31,9 +31,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -91,20 +91,25 @@ public class PersonControllerTestDocumentation {
                 .perform(post(PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(prettyPrintRequest(this.objectMapper.writeValueAsString(person))))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
-                        /* TODO - Describe all mandatory and optional Person JSON request fields. eg;
-                         * requestFields(fieldWithPath("mandatoryProperty").description("The Person mandatory mandatoryProperty value.")
-                         *  .attributes(key("constraints").value("Must not be null. Must not be empty"))
-                         * requestFields((fieldWithPath("optionalProperty").description("The Person optional optionalProperty value.").optional()
-                         */
+                        pathParameters(
+                            /* TODO - Describe the path parameter. eg;
+                             * parameterWithName("id").description("The name of the Person to retrieve")),
+                             */
+                            parameterWithName("id").description("The name of the Person to retrieve")),
                         requestFields(
-                                fieldWithPath("name").description("The Person's name")
-                                        .attributes(key("constraints").value("Must not be null. Must not be empty")),
-                                fieldWithPath("age").description("The Person's age"),
-                                fieldWithPath("email").description("The Person email address")
+                            /* TODO - Describe all mandatory and optional Person JSON request fields. eg;
+                             * requestFields(fieldWithPath("mandatoryProperty").description("The Person mandatory mandatoryProperty value.")
+                             *  .attributes(key("constraints").value("Must not be null. Must not be empty"))
+                             * requestFields((fieldWithPath("optionalProperty").description("The Person optional optionalProperty value.").optional()
+                             */
+                            fieldWithPath("name").description("The Person's name")
+                                .attributes(key("constraints").value("Must not be null. Must not be empty")),
+                            fieldWithPath("age").description("The Person's age"),
+                            fieldWithPath("email").description("The Person email address")
                         )));
         verify(personService, atLeastOnce()).create(any(Person.class));
     }
@@ -114,25 +119,20 @@ public class PersonControllerTestDocumentation {
         final Person expected = new Person();
         when(personService.findOne(any(String.class))).thenReturn(expected);
         this.mockMvc
-                .perform(get(PATH + "/{id}", "invalid"))
-                .andExpect(status().isOk())
-                .andDo(document(
-                        "{class-name}/{method-name}",
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(
-                             /* TODO - Describe the path parameter. eg;
-                             * parameterWithName("id").description("The name of the Person to retrieve")),
-                             */
-                                parameterWithName("id").description("The name of the Person to retrieve")),
-                            /* TODO - Replace response fields for the Person object. eg;
-                             * responseFields((fieldWithPath("someProperty").description("The Person someProperty value."))
-                             * responseFields((fieldWithPath("optionalProperty").description("The Person optional optionalProperty value.").optional()
-                             */
-                        responseFields(
-                                fieldWithPath("name").description("The Person's name"),
-                                fieldWithPath("age").description("The Person's age"),
-                                fieldWithPath("email").description("The Person's email address")
-                        )));
+            .perform(get(PATH + "/{id}", "99"))
+            .andExpect(status().isOk())
+            .andDo(document(
+                "{class-name}/{method-name}",
+                preprocessResponse(prettyPrint()),
+                /* TODO - Replace response fields for the Person object. eg;
+                 * responseFields((fieldWithPath("someProperty").description("The Person someProperty value."))
+                 * responseFields((fieldWithPath("optionalProperty").description("The Person optional optionalProperty value.").optional()
+                 */
+                responseFields(
+                    fieldWithPath("name").description("The Person's name"),
+                    fieldWithPath("age").description("The Person's age"),
+                    fieldWithPath("email").description("The Person's email address")
+                )));
         verify(personService, atLeastOnce()).findOne(any(String.class));
     }
 
@@ -140,8 +140,8 @@ public class PersonControllerTestDocumentation {
     public void findOnePersonNotFound() throws Exception {
         when(personService.findOne(any(String.class))).thenReturn(null);
         this.mockMvc
-                .perform(get(PATH + "/{id}", "invalid"))
-                .andExpect(status().isNotFound());
+            .perform(get(PATH + "/{id}", "invalid"))
+            .andExpect(status().isNotFound());
         verify(personService, atLeastOnce()).findOne(any(String.class));
     }
 
@@ -156,28 +156,29 @@ public class PersonControllerTestDocumentation {
 
         when(personService.findAll()).thenReturn(expected);
         this.mockMvc
-                .perform(get(PATH))
-                .andExpect(status().isOk())
-                .andDo(document(
-                        "{class-name}/{method-name}",
-                        preprocessResponse(prettyPrint()),
-                        /* TODO - If necessary, describe the findAll response fields (typically wrapped in an array) eg;
-                         * responseFields((fieldWithPath("[]").description("An array of Persons"))
-                         * responseFields((fieldWithPath("[].property").description("The Person property value."))
-                         */
-                        responseFields(fieldWithPath("[]").description("An array of Persons")
-                        )));
+            .perform(get(PATH))
+            .andExpect(status().isOk())
+            .andDo(document(
+                    "{class-name}/{method-name}",
+                    preprocessResponse(prettyPrint()),
+                    /* TODO - If necessary, describe the findAll response fields (typically wrapped in an array) eg;
+                     * responseFields((fieldWithPath("[]").description("An array of Persons"))
+                     * responseFields((fieldWithPath("[].property").description("The Person property value."))
+                     */
+                    responseFields(
+                        fieldWithPath("[]").description("An array of Persons"))
+                ));
         verify(personService, atLeastOnce()).findAll();
     }
 
     @Test
-    public void findAllPaginated() throws Exception {
+    public void findAllPeoplePaginated() throws Exception {
         final int TOTAL = 10;
         final int PER_PAGE = TOTAL / 2;
         final List<Person> expected = new ArrayList<>(TOTAL);
 
-        /* TODO - Configure an expected list of people with some identifiable attribute to verify
-         * Needs to be greater than the requested page size in order for pagination to occur.
+        /* TODO - Configure an expected list of People with some identifiable attribute to verify
+         * Needs to be greater than the requested page size in order for pagination.
          */
         for (int i = 0; i < TOTAL; i++) {
             final Person person = new Person();
@@ -186,15 +187,16 @@ public class PersonControllerTestDocumentation {
         }
         when(personService.findAll()).thenReturn(expected);
 
-        /* TODO - Configure the page index to get and the total number per page. eg;
-         * Get the 2nd page, where each page contains half the total collection
-         */
         this.mockMvc
                 .perform(get(PATH)
+                        /* TODO - Configure the page index to get and the total number per page. eg;
+                         * Get the 2nd page, where each page contains half the total collection
+                         */
                         .param("page", "1")
                         .param("size", String.valueOf(PER_PAGE)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(PER_PAGE)))
+                // TODO - Verify the 1st object in the response is the expected object (after pagination)
                 .andExpect(jsonPath("$[0].name", is("name" + PER_PAGE)))
                 .andDo(document(
                         "{class-name}/{method-name}",
@@ -213,7 +215,7 @@ public class PersonControllerTestDocumentation {
 
     @Test
     public void updatePerson() throws Exception {
-        // TODO - Configure the Person's object state and an expected updated state. eg;
+        // TODO - Configure the Person's state and an expected updated state. eg;
         final String unchangedValue = "person name";
         final Person original = new Person();
         original.setName(unchangedValue);
@@ -259,7 +261,7 @@ public class PersonControllerTestDocumentation {
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                              /* TODO - Describe the path parameter. eg;
-                             * parameterWithName("id").description("The name of the Person to retrieve")),
+                             * parameterWithName("id").description("The name of the Person to delete")),
                              */
                                 parameterWithName("id").description("The name of the Person to delete")
                         )));

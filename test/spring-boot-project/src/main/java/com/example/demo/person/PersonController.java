@@ -1,7 +1,6 @@
 package com.example.demo.person;
 
 import com.example.demo.ClientErrorInformation;
-import com.example.demo.CrudController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +22,16 @@ import java.util.stream.Collectors;
  * This code is auto-generated do not override, instead raise a feature request against the generator tool.
  */
 @RestController
-public class PersonController implements CrudController<Person, String> {
+public class PersonController {
 
     @Autowired
     private PersonService personService;
 
-    @Override
     @RequestMapping(value = "/people", method = RequestMethod.POST)
-    public Person create(@RequestBody Person person) {
-        return personService.create(person);
+    public ResponseEntity<Person> create(@RequestBody Person person) {
+        return new ResponseEntity<>(personService.create(person), HttpStatus.CREATED);
     }
 
-    @Override
     @RequestMapping(value = "/people/{id}", method = RequestMethod.GET)
     public ResponseEntity<Person> findOne(@PathVariable("id") String id) {
         Person person = personService.findOne(id);
@@ -44,38 +41,36 @@ public class PersonController implements CrudController<Person, String> {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
-    @Override
     @RequestMapping(value = "/people", method = RequestMethod.GET)
-    public List<Person> findAll() {
-        return personService.findAll();
+    public ResponseEntity<List<Person>> findAll() {
+        return new ResponseEntity<>(personService.findAll(), HttpStatus.OK);
     }
 
     /**
      * For e.g. http://localhost:8080/people?page=0&size=2
      */
-    @Override
     @RequestMapping(value = "/people", params = {"page", "size"}, method = RequestMethod.GET)
-    public List<Person> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
-        return personService.findAll()
+    public ResponseEntity<List<Person>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
+        List<Person> pagedList = personService.findAll()
                 .stream().skip(page * size).limit(size).collect(Collectors.toCollection(ArrayList::new));
+        return new ResponseEntity<>(pagedList, HttpStatus.OK);
     }
 
-    @Override
     @RequestMapping(value = "/people", method = RequestMethod.PUT)
-    public Person update(@RequestBody Person person) {
-        return personService.update(person);
+    public ResponseEntity<Person> update(@RequestBody Person person) {
+        return new ResponseEntity<>(personService.update(person), HttpStatus.OK);
     }
 
-    @Override
     @RequestMapping(value = "/people/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") String id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         personService.delete(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @Override
     @RequestMapping(value = "/people", method = RequestMethod.DELETE)
-    public void deleteAll() {
+    public ResponseEntity<Void> deleteAll() {
         personService.deleteAll();
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
@@ -83,4 +78,16 @@ public class PersonController implements CrudController<Person, String> {
         ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
         return new ResponseEntity<>(error, HttpStatus.NOT_IMPLEMENTED);
     }
+
+        
+    /**
+     * For e.g. http://localhost:8080/people?filter=...
+     */
+    @RequestMapping(value = "/people", params = {"filter"}, method = RequestMethod.GET)
+    public ResponseEntity<List<Person>> findFiltered(@RequestParam("filter") String filter) {
+        List<Person> filteredList = personService.findAll()
+                .stream().filter(p -> p.getEmail().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
+        return new ResponseEntity<>(filteredList, HttpStatus.OK);
+    }
+    
 }

@@ -91,7 +91,7 @@ public class <%= noun %>ControllerTestDocumentation {
                 .perform(post(PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(prettyPrintRequest(this.objectMapper.writeValueAsString(<%= nounLowercase %>))))
-                .andExpect(status().isOk()) // TODO - should be a 201, ie; isCreated
+                .andExpect(status().isCreated())
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
@@ -167,7 +167,7 @@ public class <%= noun %>ControllerTestDocumentation {
                      */
                     responseFields(
                         fieldWithPath("[]").description("An array of <%= noun %>s"))
-                )));
+                ));
         verify(<%= nounLowercase %>Service, atLeastOnce()).findAll();
     }
 
