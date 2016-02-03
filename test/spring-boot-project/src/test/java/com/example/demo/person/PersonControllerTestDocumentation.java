@@ -82,11 +82,7 @@ public class PersonControllerTestDocumentation {
                 .perform(post(PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(prettyPrintRequest(this.objectMapper.writeValueAsString(person))))
-<<<<<<< HEAD
                 .andExpect(status().isCreated())
-=======
-                .andExpect(status().isOk())
->>>>>>> 2882481a9e50b26a8c281e6f93b8da424c21c6e9
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),

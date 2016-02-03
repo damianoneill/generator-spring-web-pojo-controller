@@ -73,18 +73,12 @@ public class PersonController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-<<<<<<< HEAD
-=======
-        
-
->>>>>>> 2882481a9e50b26a8c281e6f93b8da424c21c6e9
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperationException(HttpServletRequest req, Exception e) {
         ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
         return new ResponseEntity<>(error, HttpStatus.NOT_IMPLEMENTED);
     }
-<<<<<<< HEAD
-        
+
     /**
      * For e.g. http://localhost:8080/people?filter=...
      */
@@ -94,7 +88,5 @@ public class PersonController {
                 .stream().filter(p -> p.getEmail().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
         return new ResponseEntity<>(filteredList, HttpStatus.OK);
     }
-    
-=======
->>>>>>> 2882481a9e50b26a8c281e6f93b8da424c21c6e9
+
 }
