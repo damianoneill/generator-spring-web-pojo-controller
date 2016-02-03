@@ -79,7 +79,6 @@ public class PersonController {
         return new ResponseEntity<>(error, HttpStatus.NOT_IMPLEMENTED);
     }
 
-        
     /**
      * For e.g. http://localhost:8080/people?filter=...
      */
@@ -89,5 +88,5 @@ public class PersonController {
                 .stream().filter(p -> p.getEmail().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
         return new ResponseEntity<>(filteredList, HttpStatus.OK);
     }
-    
+
 }
