@@ -84,6 +84,7 @@ module.exports = yeoman.generators.Base.extend({
     var nounPlural = pluralize(this.properties.noun);
     var nounLowercase = this.properties.noun.toLowerCase();
     var nounLowercasePlural = pluralize(nounLowercase);
+    var filterNameUpper = this.properties.filterName && this.properties.filterName[0].toUpperCase() + this.properties.filterName.slice(1);
 
     this.fs.copyTpl(
       this.templatePath('ClientErrorInformation.java'),
@@ -99,6 +100,7 @@ module.exports = yeoman.generators.Base.extend({
         nounLowercase: nounLowercase,
         nounLowercasePlural: nounLowercasePlural,
         type: this.properties.type,
+        filterNameUpper: filterNameUpper,
         filterName: this.properties.filterName,
         filterType: this.properties.filterType,
         filterYesNo: this.properties.filterYesNo
@@ -123,6 +125,7 @@ module.exports = yeoman.generators.Base.extend({
         nounLowercase: nounLowercase,
         nounLowercasePlural: nounLowercasePlural,
         type: this.properties.type,
+        filterNameUpper: filterNameUpper,
         filterName: this.properties.filterName,
         filterType: this.properties.filterType,
         filterYesNo: this.properties.filterYesNo

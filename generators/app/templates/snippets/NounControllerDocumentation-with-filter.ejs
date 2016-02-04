@@ -6,9 +6,9 @@
          * verify filter returns the correct collection.
          */
         final <%= noun %> matching = new <%= noun %>();
-        matching.setEmail("matching");
+        matching.set<%= filterNameUpper %>("matching");
         final <%= noun %> nonMatching = new <%= noun %>();
-        nonMatching.setEmail("nonMatching");
+        nonMatching.set<%= filterNameUpper %>("nonMatching");
         final List<<%= noun %>> <%= nounLowercasePlural %> = new ArrayList<>();
         <%= nounLowercasePlural %>.add(matching);
         <%= nounLowercasePlural %>.add(nonMatching);
@@ -16,20 +16,20 @@
         when(<%= nounLowercase %>Service.findAll()).thenReturn(<%= nounLowercasePlural %>);
         this.mockMvc
                 .perform(get(PATH)
-                        // TODO - Configure the filter parameter eg; email="matching"
+                        // TODO - Configure the filter parameter eg; <%= filterName %>="matching"
                         .param("filter", "matching"))
                 .andExpect(status().isOk())
                 /* TODO - Configure and verify the size of the returned array.
                  * Also verify the results are as expected when filtered
                  */
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].email", is("matching")))
+                .andExpect(jsonPath("$[0].<%= filterName %>", is("matching")))
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
                         // TODO - Describe the parameters for the filtered value.
                         requestParameters(
-                                parameterWithName("filter").description("The filter value for the <%= noun %>'s email")
+                                parameterWithName("filter").description("The filter value for the <%= noun %>'s <%= filterName %>")
                         )));
         verify(<%= nounLowercase %>Service, atLeastOnce()).findAll();
     }

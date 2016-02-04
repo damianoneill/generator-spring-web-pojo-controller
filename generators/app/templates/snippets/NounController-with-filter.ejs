@@ -5,7 +5,7 @@
     @RequestMapping(value = "/<%= nounLowercasePlural %>", params = {"filter"}, method = RequestMethod.GET)
     public ResponseEntity<List<<%= noun %>>> findFiltered(@RequestParam("filter") String filter) {
         List<<%= noun %>> filteredList = <%= nounLowercase %>Service.findAll()
-                .stream().filter(p -> p.getEmail().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
+                .stream().filter(p -> p.get<%= filterNameUpper %>().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
         return new ResponseEntity<>(filteredList, HttpStatus.OK);
     }
     <% } %>
