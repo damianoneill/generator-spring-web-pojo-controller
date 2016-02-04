@@ -95,11 +95,6 @@ public class <%= noun %>ControllerTestDocumentation {
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
-                            /* TODO - Describe the path parameter. eg;
-                             * parameterWithName("id").description("The name of the Person to retrieve")),
-                             */
-                            parameterWithName("id").description("The name of the Person to retrieve")),
                         requestFields(
                             /* TODO - Describe all mandatory and optional Person JSON request fields. eg;
                              * requestFields(fieldWithPath("mandatoryProperty").description("The Person mandatory mandatoryProperty value.")
@@ -279,6 +274,8 @@ public class <%= noun %>ControllerTestDocumentation {
                 ));
         verify(<%= nounLowercase %>Service, atLeastOnce()).deleteAll();
     }
+
+    <%- include snippets/NounControllerDocumentation-with-filter.ejs -%>
 
     private String prettyPrintRequest(String original) throws IOException {
         ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);

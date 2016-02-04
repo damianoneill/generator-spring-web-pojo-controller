@@ -40,7 +40,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'filterName',
       message: 'What\'s the name of the variable used as an filter in the noun\'s collection?',
       store: true,
-      default: 'age'
+      default: 'email'
     }, {
       when: function (response) {
         return response.filterYesNo;
@@ -49,7 +49,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'filterType',
       message: 'What\'s the type (if primitive, use its wrapper class) of the variable used as an filter in the noun\'s collection?',
       store: true,
-      default: 'Integer'
+      default: 'String'
     }, {
       type: 'input',
       name: 'packageName',
@@ -122,7 +122,10 @@ module.exports = yeoman.generators.Base.extend({
         nounPlural: nounPlural,
         nounLowercase: nounLowercase,
         nounLowercasePlural: nounLowercasePlural,
-        type: this.properties.type
+        type: this.properties.type,
+        filterName: this.properties.filterName,
+        filterType: this.properties.filterType,
+        filterYesNo: this.properties.filterYesNo
       }
     );
   }

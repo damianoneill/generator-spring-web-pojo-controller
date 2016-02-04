@@ -1,0 +1,36 @@
+    <%if (filterYesNo) { %>
+    @Test
+    public void findAll<%= nounPlural %>Filtered() throws Exception {
+        /* TODO - Configure and add matching and non-matching <%= nounLowercasePlural %> to a List.
+         * Add at least one matching and at least one non-matching, in order to
+         * verify filter returns the correct collection.
+         */
+        final <%= noun %> matching = new <%= noun %>();
+        matching.setEmail("matching");
+        final <%= noun %> nonMatching = new <%= noun %>();
+        nonMatching.setEmail("nonMatching");
+        final List<<%= noun %>> <%= nounLowercasePlural %> = new ArrayList<>();
+        <%= nounLowercasePlural %>.add(matching);
+        <%= nounLowercasePlural %>.add(nonMatching);
+
+        when(<%= nounLowercase %>Service.findAll()).thenReturn(<%= nounLowercasePlural %>);
+        this.mockMvc
+                .perform(get(PATH)
+                        // TODO - Configure the filter parameter eg; email="matching"
+                        .param("filter", "matching"))
+                .andExpect(status().isOk())
+                /* TODO - Configure and verify the size of the returned array.
+                 * Also verify the results are as expected when filtered
+                 */
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].email", is("matching")))
+                .andDo(document(
+                        "{class-name}/{method-name}",
+                        preprocessResponse(prettyPrint()),
+                        // TODO - Describe the parameters for the filtered value.
+                        requestParameters(
+                                parameterWithName("filter").description("The filter value for the <%= noun %>'s email")
+                        )));
+        verify(<%= nounLowercase %>Service, atLeastOnce()).findAll();
+    }
+    <% } %>
