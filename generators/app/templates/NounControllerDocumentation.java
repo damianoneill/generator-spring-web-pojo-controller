@@ -275,6 +275,8 @@ public class <%= noun %>ControllerTestDocumentation {
         verify(<%= nounLowercase %>Service, atLeastOnce()).deleteAll();
     }
 
+    <%- include snippets/NounControllerDocumentation-with-filter.ejs -%>
+
     private String prettyPrintRequest(String original) throws IOException {
         ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
         return mapper.writeValueAsString(mapper.readTree(original));

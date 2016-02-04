@@ -275,6 +275,42 @@ public class PersonControllerTestDocumentation {
         verify(personService, atLeastOnce()).deleteAll();
     }
 
+        
+    @Test
+    public void findAllPeopleFiltered() throws Exception {
+        /* TODO - Configure and add matching and non-matching people to a List.
+         * Add at least one matching and at least one non-matching, in order to
+         * verify filter returns the correct collection.
+         */
+        final Person matching = new Person();
+        matching.setEmail("matching");
+        final Person nonMatching = new Person();
+        nonMatching.setEmail("nonMatching");
+        final List<Person> people = new ArrayList<>();
+        people.add(matching);
+        people.add(nonMatching);
+
+        when(personService.findAll()).thenReturn(people);
+        this.mockMvc
+                .perform(get(PATH)
+                        // TODO - Configure the filter parameter eg; email="matching"
+                        .param("filter", "matching"))
+                .andExpect(status().isOk())
+                /* TODO - Configure and verify the size of the returned array.
+                 * Also verify the results are as expected when filtered
+                 */
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].email", is("matching")))
+                .andDo(document(
+                        "{class-name}/{method-name}",
+                        preprocessResponse(prettyPrint()),
+                        // TODO - Describe the parameters for the filtered value.
+                        requestParameters(
+                                parameterWithName("filter").description("The filter value for the Person's email")
+                        )));
+        verify(personService, atLeastOnce()).findAll();
+    }
+    
     private String prettyPrintRequest(String original) throws IOException {
         ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
         return mapper.writeValueAsString(mapper.readTree(original));
