@@ -95,11 +95,6 @@ public class PersonControllerTestDocumentation {
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
-                            /* TODO - Describe the path parameter. eg;
-                             * parameterWithName("id").description("The name of the Person to retrieve")),
-                             */
-                            parameterWithName("id").description("The name of the Person to retrieve")),
                         requestFields(
                             /* TODO - Describe all mandatory and optional Person JSON request fields. eg;
                              * requestFields(fieldWithPath("mandatoryProperty").description("The Person mandatory mandatoryProperty value.")
