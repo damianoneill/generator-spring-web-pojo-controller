@@ -3,6 +3,10 @@ Spring Web Scaffolding System for a Collection Pojo based Controller
 
 ## Setup
    
+Install node:
+
+     $ brew install node 
+     
 Install yeoman:
    
      $ npm install -g yo
