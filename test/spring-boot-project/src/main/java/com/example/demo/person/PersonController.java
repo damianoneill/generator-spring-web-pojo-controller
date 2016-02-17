@@ -4,6 +4,8 @@ import com.example.demo.ClientErrorInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,11 +27,16 @@ import java.util.stream.Collectors;
 @RestController
 public class PersonController {
 
+    public static final String NOT_AVAILABLE = "Not Available";
+    public static final String FIELD_ERROR_IN_OBJECT = "Field error in object \'";
+    public static final String ON_FIELD = "\' on field \'";
+    public static final String COLON = "\': ";
+
     @Autowired
     private PersonService personService;
 
     @RequestMapping(value = "/people", method = RequestMethod.POST)
-    public ResponseEntity<Person> create(@RequestBody Person person) {
+    public ResponseEntity<Person> create(@RequestBody @Valid Person person) {
         return new ResponseEntity<>(personService.create(person), HttpStatus.CREATED);
     }
 
@@ -57,7 +65,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/people", method = RequestMethod.PUT)
-    public ResponseEntity<Person> update(@RequestBody Person person) {
+    public ResponseEntity<Person> update(@RequestBody @Valid Person person) {
         return new ResponseEntity<>(personService.update(person), HttpStatus.OK);
     }
 
@@ -74,9 +82,21 @@ public class PersonController {
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
-    public ResponseEntity<ClientErrorInformation> handleUnsupportedOperationException(HttpServletRequest req, Exception e) {
+    public ResponseEntity<ClientErrorInformation> handleUnsupportedOperation(HttpServletRequest req, Exception e) {
         ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
         return new ResponseEntity<>(error, HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ClientErrorInformation> handleMethodArgumentNotValid(HttpServletRequest req, MethodArgumentNotValidException e) {
+        String message = NOT_AVAILABLE;
+        FieldError fieldError = e.getBindingResult().getFieldErrors().get(0);
+        if (fieldError != null) {
+            message = FIELD_ERROR_IN_OBJECT + fieldError.getObjectName() + ON_FIELD + fieldError.getField() + COLON +
+                    fieldError.getDefaultMessage();
+        }
+        ClientErrorInformation error = new ClientErrorInformation(message, req.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
         

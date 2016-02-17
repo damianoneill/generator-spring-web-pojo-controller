@@ -212,12 +212,15 @@ public class <%= noun %>ControllerTestDocumentation {
     public void update<%= noun %>() throws Exception {
         // TODO - Configure the <%= noun %>'s state and an expected updated state. eg;
         final String unchangedValue = "person name";
+        final String email = "someemail@email.com";
         final <%= noun %> original = new <%= noun %>();
         original.setName(unchangedValue);
-        original.setAge(1);
+        original.setEmail(email);
+        original.setAge(18);
         final <%= noun %> updated = new <%= noun %>();
         updated.setName(unchangedValue);
-        updated.setAge(2);
+        updated.setEmail(email);
+        updated.setAge(20);
 
         when(<%= nounLowercase %>Service.update(original)).thenReturn(updated);
         this.mockMvc
@@ -227,7 +230,7 @@ public class <%= noun %>ControllerTestDocumentation {
                 .andExpect(status().isOk())
                 // TODO - Verify the updated object was returned eg;
                 .andExpect(jsonPath("$.name", is(unchangedValue)))
-                .andExpect(jsonPath("$.age", is(2)))
+                .andExpect(jsonPath("$.age", is(20)))
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
