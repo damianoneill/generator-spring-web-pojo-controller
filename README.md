@@ -56,6 +56,12 @@ List<T> findFiltered(@RequestParam("filter") T' filter)
 
 ## Build and compile github project
 
+Setup the dependencies
+
+     $ npm install
+     
+Build and run the tests
+
      $ npm test
      
 And then link to you can test it
