@@ -9,11 +9,11 @@ Install node:
      
 Install yeoman:
    
-     $ npm install -g yo
+     $ sudo npm install -g yo
    
 Install generator:
    
-     $ npm install -g spring-web-pojo-controller
+     $ sudo npm install -g spring-web-pojo-controller
    
      
 ## Using the generator
