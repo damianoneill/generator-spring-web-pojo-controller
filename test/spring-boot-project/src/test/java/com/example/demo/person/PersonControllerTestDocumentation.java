@@ -12,9 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.restdocs.RestDocumentation;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,7 +28,6 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -89,7 +86,7 @@ public class PersonControllerTestDocumentation {
         person.setEmail("person@email.com");
 
         when(personService.create(any(Person.class))).thenReturn(
-                Observable.just(new ResponseEntity<Person>(HttpStatus.ACCEPTED)));
+                Observable.just(new HttpEntity<>(person, new HttpHeaders())));
 
 
         MvcResult mvcResult = this.mockMvc
@@ -101,7 +98,7 @@ public class PersonControllerTestDocumentation {
 
         this.mockMvc
                 .perform(asyncDispatch(mvcResult))
-                .andExpect(status().isAccepted())
+                .andExpect(status().isOk())
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
@@ -168,10 +165,15 @@ public class PersonControllerTestDocumentation {
         final List<Person> expected = new ArrayList<>();
         expected.add(person);
 
-        when(personService.findAll()).thenReturn(expected);
+        when(personService.findAll()).thenReturn(Observable.just(expected));
+
+        MvcResult mvcResult = this.mockMvc.perform(get(PATH))
+                .andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
+
         this.mockMvc
-            .perform(get(PATH))
-            .andExpect(status().isOk())
+                .perform(asyncDispatch(mvcResult))
+                .andExpect(status().isOk())
             .andDo(document(
                     "{class-name}/{method-name}",
                     preprocessResponse(prettyPrint()),
@@ -199,15 +201,22 @@ public class PersonControllerTestDocumentation {
             person.setName("name" + i);
             expected.add(person);
         }
-        when(personService.findAll()).thenReturn(expected);
+        when(personService.findAll()).thenReturn(Observable.just(expected));
 
-        this.mockMvc
+        MvcResult mvcResult =
+                this.mockMvc
                 .perform(get(PATH)
                         /* TODO - Configure the page index to get and the total number per page. eg;
                          * Get the 2nd page, where each page contains half the total collection
                          */
-                        .param("page", "1")
-                        .param("size", String.valueOf(PER_PAGE)))
+                .param("page", "1")
+                .param("size", String.valueOf(PER_PAGE)))
+                .andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
+
+
+        this.mockMvc
+                .perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(PER_PAGE)))
                 // TODO - Verify the 1st object in the response is the expected object (after pagination)
@@ -241,11 +250,18 @@ public class PersonControllerTestDocumentation {
         updated.setEmail(email);
         updated.setAge(20);
 
-        when(personService.update(original)).thenReturn(updated);
+
+        when(personService.update(any(Person.class))).thenReturn(
+                Observable.just(new HttpEntity<>(updated, new HttpHeaders())));
+
+        MvcResult mvcResult = this.mockMvc.perform(put(PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(prettyPrintRequest(this.objectMapper.writeValueAsString(original))))
+                .andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
+
         this.mockMvc
-                .perform(put(PATH)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(prettyPrintRequest(this.objectMapper.writeValueAsString(original))))
+                .perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 // TODO - Verify the updated object was returned eg;
                 .andExpect(jsonPath("$.name", is(unchangedValue)))
@@ -270,9 +286,26 @@ public class PersonControllerTestDocumentation {
 
     @Test
     public void deletePerson() throws Exception {
-        this.mockMvc
+
+        final Person deleted = new Person();
+        deleted.setName("person name");
+        deleted.setEmail("someemail@email.com");
+        deleted.setAge(20);
+
+
+        when(personService.delete(any(String.class))).thenReturn(
+                Observable.just(new HttpEntity<>(deleted, new HttpHeaders())));
+
+
+        MvcResult mvcResult = this.mockMvc
                 .perform(delete(PATH + "/{id}", "99"))
                 .andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
+
+        this.mockMvc
+                .perform(asyncDispatch(mvcResult))
+                .andExpect(status().isOk())
+
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
@@ -287,12 +320,29 @@ public class PersonControllerTestDocumentation {
 
     @Test
     public void deleteAllPeople() throws Exception {
+
+        final Person person = new Person();
+        /* TODO - Configure and add at least one Person to the expected List.
+         * person.setId("id");
+         */
+        final List<Person> expected = new ArrayList<>();
+        expected.add(person);
+
+        // non blocking service
+        when(personService.deleteAll()).thenReturn(Observable.just(new HttpEntity<>(expected, new HttpHeaders())));
+
+
+        MvcResult mvcResult = this.mockMvc.perform(delete(PATH))
+                .andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
         this.mockMvc
-                .perform(delete(PATH))
+                .perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 .andDo(document(
                         "{class-name}/{method-name}",
-                        preprocessResponse(prettyPrint())
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("[]").description("An array of Persons"))
                 ));
         verify(personService, atLeastOnce()).deleteAll();
     }
@@ -312,11 +362,17 @@ public class PersonControllerTestDocumentation {
         people.add(matching);
         people.add(nonMatching);
 
-        when(personService.findAll()).thenReturn(people);
+        when(personService.findAll()).thenReturn(Observable.just(people));
+
+        MvcResult mvcResult = this.mockMvc.perform(get(PATH)
+                // TODO - Configure the filter parameter eg; email="matching"
+                .param("filter", "matching")).
+
+                andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
+
         this.mockMvc
-                .perform(get(PATH)
-                        // TODO - Configure the filter parameter eg; email="matching"
-                        .param("filter", "matching"))
+                .perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 /* TODO - Configure and verify the size of the returned array.
                  * Also verify the results are as expected when filtered
