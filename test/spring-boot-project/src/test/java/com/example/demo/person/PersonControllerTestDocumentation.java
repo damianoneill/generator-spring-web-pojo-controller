@@ -12,13 +12,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.RestDocumentation;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import rx.Observable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,19 +34,15 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = PersonController.class)
@@ -87,11 +87,21 @@ public class PersonControllerTestDocumentation {
         person.setName("person name");
         person.setAge(19);
         person.setEmail("person@email.com");
-        this.mockMvc
+
+        when(personService.create(any(Person.class))).thenReturn(
+                Observable.just(new ResponseEntity<Person>(HttpStatus.ACCEPTED)));
+
+
+        MvcResult mvcResult = this.mockMvc
                 .perform(post(PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(prettyPrintRequest(this.objectMapper.writeValueAsString(person))))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
+
+        this.mockMvc
+                .perform(asyncDispatch(mvcResult))
+                .andExpect(status().isAccepted())
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
@@ -112,12 +122,18 @@ public class PersonControllerTestDocumentation {
     @Test
     public void findOnePerson() throws Exception {
         final Person expected = new Person();
-        when(personService.findOne(any(String.class))).thenReturn(expected);
+        when(personService.findOne(any(String.class))).thenReturn(Observable.just(expected));
+
+
+        MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", 99)).
+                andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
+
         this.mockMvc
-            .perform(get(PATH + "/{id}", "99"))
-            .andExpect(status().isOk())
-            .andDo(document(
-                "{class-name}/{method-name}",
+                .perform(asyncDispatch(mvcResult))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "{class-name}/{method-name}",
                 preprocessResponse(prettyPrint()),
                 /* TODO - Replace response fields for the Person object. eg;
                  * responseFields((fieldWithPath("someProperty").description("The Person someProperty value."))
@@ -133,10 +149,13 @@ public class PersonControllerTestDocumentation {
 
     @Test
     public void findOnePersonNotFound() throws Exception {
-        when(personService.findOne(any(String.class))).thenReturn(null);
-        this.mockMvc
-            .perform(get(PATH + "/{id}", "invalid"))
-            .andExpect(status().isNotFound());
+        when(personService.findOne(any(String.class))).thenReturn(Observable.just(null));
+
+        MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "invalid"))
+                .andExpect(status().isOk())
+                .andExpect(request().asyncStarted())
+                .andReturn();
+        this.mockMvc.perform(asyncDispatch(mvcResult)).andExpect(status().isNotFound());
         verify(personService, atLeastOnce()).findOne(any(String.class));
     }
 

@@ -6,13 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -36,17 +31,32 @@ public class PersonController {
     private PersonService personService;
 
     @RequestMapping(value = "/people", method = RequestMethod.POST)
-    public ResponseEntity<Person> create(@RequestBody @Valid Person person) {
-        return new ResponseEntity<>(personService.create(person), HttpStatus.CREATED);
+    public DeferredResult<ResponseEntity<Person>> create(@RequestBody @Valid Person person) {
+        DeferredResult<ResponseEntity<Person>> deferred = new DeferredResult<>();
+
+        personService.create(person).subscribe(personHttpEntity -> {
+            deferred.setResult(new ResponseEntity<>(
+                    personHttpEntity.getBody(),
+                    personHttpEntity.getHeaders(),
+                    personHttpEntity.getBody() == null ? HttpStatus.ACCEPTED : HttpStatus.OK
+            ));
+        }, deferred::setErrorResult);
+
+        return deferred;
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Person> findOne(@PathVariable("id") String id) {
-        Person person = personService.findOne(id);
-        if (person == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(person, HttpStatus.OK);
+    public DeferredResult<ResponseEntity<Person>> findOne(@PathVariable("id") String id) {
+        final DeferredResult<ResponseEntity<Person>> deferred = new DeferredResult<>();
+        // No timeout here
+        personService.findOne(id).singleOrDefault(null).subscribe(item -> {
+            if (item == null) {
+                deferred.setResult(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            } else {
+                deferred.setResult(ResponseEntity.ok(item));
+            }
+        }, deferred::setErrorResult);
+        return deferred;
     }
 
     @RequestMapping(value = "/people", method = RequestMethod.GET)
