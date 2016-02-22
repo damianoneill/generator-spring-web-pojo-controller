@@ -85,7 +85,7 @@ public class PersonControllerTestDocumentation {
         person.setAge(19);
         person.setEmail("person@email.com");
 
-        when(personService.create(any(Person.class))).thenReturn(
+        when(personService.create(person)).thenReturn(
                 Observable.just(new HttpEntity<>(person, new HttpHeaders())));
 
 
@@ -113,13 +113,13 @@ public class PersonControllerTestDocumentation {
                             fieldWithPath("age").description("The Person's age"),
                             fieldWithPath("email").description("The Person email address")
                         )));
-        verify(personService, atLeastOnce()).create(any(Person.class));
+        verify(personService, atLeastOnce()).create(person);
     }
 
     @Test
     public void findOnePerson() throws Exception {
         final Person expected = new Person();
-        when(personService.findOne(any(String.class))).thenReturn(Observable.just(expected));
+        when(personService.findOne("99")).thenReturn(Observable.just(expected));
 
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", 99)).
@@ -141,19 +141,20 @@ public class PersonControllerTestDocumentation {
                     fieldWithPath("age").description("The Person's age"),
                     fieldWithPath("email").description("The Person's email address")
                 )));
-        verify(personService, atLeastOnce()).findOne(any(String.class));
+        verify(personService, atLeastOnce()).findOne("99");
     }
 
     @Test
     public void findOnePersonNotFound() throws Exception {
-        when(personService.findOne(any(String.class))).thenReturn(Observable.just(null));
+        when(personService.findOne("invalid")).thenReturn(Observable.just(null));
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "invalid"))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
                 .andReturn();
+
         this.mockMvc.perform(asyncDispatch(mvcResult)).andExpect(status().isNotFound());
-        verify(personService, atLeastOnce()).findOne(any(String.class));
+        verify(personService, atLeastOnce()).findOne("invalid");
     }
 
     @Test
@@ -251,7 +252,7 @@ public class PersonControllerTestDocumentation {
         updated.setAge(20);
 
 
-        when(personService.update(any(Person.class))).thenReturn(
+        when(personService.update(original)).thenReturn(
                 Observable.just(new HttpEntity<>(updated, new HttpHeaders())));
 
         MvcResult mvcResult = this.mockMvc.perform(put(PATH)
@@ -293,12 +294,12 @@ public class PersonControllerTestDocumentation {
         deleted.setAge(20);
 
 
-        when(personService.delete(any(String.class))).thenReturn(
+        when(personService.delete("20")).thenReturn(
                 Observable.just(new HttpEntity<>(deleted, new HttpHeaders())));
 
 
         MvcResult mvcResult = this.mockMvc
-                .perform(delete(PATH + "/{id}", "99"))
+                .perform(delete(PATH + "/{id}", "20"))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted()).andReturn();
 
@@ -315,7 +316,7 @@ public class PersonControllerTestDocumentation {
                              */
                                 parameterWithName("id").description("The name of the Person to delete")
                         )));
-        verify(personService, atLeastOnce()).delete("99");
+        verify(personService, atLeastOnce()).delete("20");
     }
 
     @Test
