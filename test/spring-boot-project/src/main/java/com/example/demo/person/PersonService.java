@@ -1,7 +1,9 @@
 package com.example.demo.person;
 
 
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import rx.Observable;
 
 import java.util.List;
 
@@ -14,10 +16,11 @@ public class PersonService {
     /**
      * Create an Person.
      *
-     * @param person the person
-     * @return the person
+     * @param person the person to create
+     * @return an observable that emits a HttpEntity.
      */
-    public Person create(Person person) {
+    public Observable<HttpEntity<Person>> create(Person person) {
+        // Return entity with a body if request has been fully handled.
         throw new UnsupportedOperationException();
     }
 
@@ -25,18 +28,18 @@ public class PersonService {
      * Find one Person.
      *
      * @param id the id
-     * @return the person
+     * @return an observable that emits a Person.
      */
-    public Person findOne(String id) {
+    public Observable<Person> findOne(String id) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Find all people.
      *
-     * @return the list
+     * @return an observable that emits the list
      */
-    public List<Person> findAll() {
+    public Observable<List<Person>> findAll() {
         throw new UnsupportedOperationException();
     }
 
@@ -44,9 +47,9 @@ public class PersonService {
      * Update an Person.
      *
      * @param person the person
-     * @return the person
+     * @return an observable that emits a HttpEntity.
      */
-    public Person update(Person person) {
+    public Observable<HttpEntity<Person>> update(Person person) {
         throw new UnsupportedOperationException();
     }
 
@@ -54,15 +57,18 @@ public class PersonService {
      * Delete an Person.
      *
      * @param id the id
+     * @return an observable that emits a HttpEntity.
      */
-    public void delete(String id) {
+    public Observable<HttpEntity<Person>> delete(String id) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Delete all people.
+     * @return an observable that emits a HttpEntity.
+
      */
-    public void deleteAll() {
+    public Observable<HttpEntity<List<Person>>> deleteAll() {
         throw new UnsupportedOperationException();
     }
 }
