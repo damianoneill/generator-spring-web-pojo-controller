@@ -17,7 +17,7 @@ public class PersonService {
      * Create an Person.
      *
      * @param person the person to create
-     * @return an observable that emits a HttpEntity.
+     * @return an observable that emits a non-null HttpEntity.
      */
     public Observable<HttpEntity<Person>> create(Person person) {
         // Return entity with a body if request has been fully handled.
@@ -28,18 +28,18 @@ public class PersonService {
      * Find one Person.
      *
      * @param id the id
-     * @return an observable that emits a Person.
+     * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<Person> findOne(String id) {
+    public Observable<HttpEntity<Person>> findOne(String id) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Find all people.
      *
-     * @return an observable that emits the list
+     * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<List<Person>> findAll() {
+    public Observable<HttpEntity<List<Person>>> findAll() {
         throw new UnsupportedOperationException();
     }
 
@@ -47,7 +47,7 @@ public class PersonService {
      * Update an Person.
      *
      * @param person the person
-     * @return an observable that emits a HttpEntity.
+     * @return an observable that emits a non-null HttpEntity.
      */
     public Observable<HttpEntity<Person>> update(Person person) {
         throw new UnsupportedOperationException();
@@ -57,7 +57,7 @@ public class PersonService {
      * Delete an Person.
      *
      * @param id the id
-     * @return an observable that emits a HttpEntity.
+     * @return an observable that emits a non-null HttpEntity.
      */
     public Observable<HttpEntity<Person>> delete(String id) {
         throw new UnsupportedOperationException();
@@ -65,7 +65,7 @@ public class PersonService {
 
     /**
      * Delete all people.
-     * @return an observable that emits a HttpEntity.
+     * @return an observable that emits a non-null HttpEntity.
 
      */
     public Observable<HttpEntity<List<Person>>> deleteAll() {

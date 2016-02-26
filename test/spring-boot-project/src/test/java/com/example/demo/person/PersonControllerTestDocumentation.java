@@ -119,7 +119,7 @@ public class PersonControllerTestDocumentation {
     @Test
     public void findOnePerson() throws Exception {
         final Person expected = new Person();
-        when(personService.findOne("99")).thenReturn(Observable.just(expected));
+        when(personService.findOne("99")).thenReturn(Observable.just(new HttpEntity<>(expected, new HttpHeaders())));
 
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", 99)).
@@ -146,7 +146,7 @@ public class PersonControllerTestDocumentation {
 
     @Test
     public void findOnePersonNotFound() throws Exception {
-        when(personService.findOne("invalid")).thenReturn(Observable.just(null));
+        when(personService.findOne("invalid")).thenReturn(Observable.just(new HttpEntity(null)));
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "invalid"))
                 .andExpect(status().isOk())
@@ -166,7 +166,7 @@ public class PersonControllerTestDocumentation {
         final List<Person> expected = new ArrayList<>();
         expected.add(person);
 
-        when(personService.findAll()).thenReturn(Observable.just(expected));
+        when(personService.findAll()).thenReturn(Observable.just(new HttpEntity<>(expected)));
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk())
@@ -202,7 +202,7 @@ public class PersonControllerTestDocumentation {
             person.setName("name" + i);
             expected.add(person);
         }
-        when(personService.findAll()).thenReturn(Observable.just(expected));
+        when(personService.findAll()).thenReturn(Observable.just(new HttpEntity<>(expected)));
 
         MvcResult mvcResult =
                 this.mockMvc
@@ -363,7 +363,7 @@ public class PersonControllerTestDocumentation {
         people.add(matching);
         people.add(nonMatching);
 
-        when(personService.findAll()).thenReturn(Observable.just(people));
+        when(personService.findAll()).thenReturn(Observable.just(new HttpEntity<>(people)));
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH)
                 // TODO - Configure the filter parameter eg; email="matching"

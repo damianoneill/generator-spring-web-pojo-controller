@@ -3,6 +3,7 @@ package com.example.demo.person;
 import com.example.demo.ClientErrorInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -33,35 +34,33 @@ public class PersonController {
 
     @RequestMapping(value = "/people", method = RequestMethod.POST)
     public DeferredResult<ResponseEntity<Person>> create(@RequestBody @Valid Person person) {
-        DeferredResult<ResponseEntity<Person>> deferred = new DeferredResult<>();
+        DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
 
         personService.create(person).subscribe(
-                personHttpEntity -> deferred.setResult(toResponseEntity(personHttpEntity)), deferred::setErrorResult);
+                he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
 
-        return deferred;
+        return result;
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.GET)
     public DeferredResult<ResponseEntity<Person>> findOne(@PathVariable("id") String id) {
-        final DeferredResult<ResponseEntity<Person>> deferred = new DeferredResult<>();
-        // No timeout here
-        personService.findOne(id).singleOrDefault(null).subscribe(item -> {
-            if (item == null) {
-                deferred.setResult(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-            } else {
-                deferred.setResult(ResponseEntity.ok(item));
-            }
-        }, deferred::setErrorResult);
-        return deferred;
+        final DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
+
+        personService.findOne(id).subscribe(
+                he -> result.setResult(toResponseEntity(he, HttpStatus.NOT_FOUND)),
+                result::setErrorResult);
+
+        return result;
     }
 
     @RequestMapping(value = "/people", method = RequestMethod.GET)
     public DeferredResult<ResponseEntity<List<Person>>> findAll() {
-        final DeferredResult<ResponseEntity<List<Person>>> deferred = new DeferredResult<>();
+        final DeferredResult<ResponseEntity<List<Person>>> result = new DeferredResult<>();
         personService.findAll().subscribe(
-                item -> deferred.setResult(ResponseEntity.ok(item)),
-                deferred::setErrorResult);
-        return deferred;
+                he -> result.setResult(
+                        toOkResponseEntity(he.getBody(), he.getHeaders())),
+                result::setErrorResult);
+        return result;
     }
 
     /**
@@ -69,45 +68,39 @@ public class PersonController {
      */
     @RequestMapping(value = "/people", params = {"page", "size"}, method = RequestMethod.GET)
     public DeferredResult<ResponseEntity<List<Person>>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
-        final DeferredResult<ResponseEntity<List<Person>>> deferred = new DeferredResult<>();
-        personService.findAll().subscribe(item -> {
-            final List<Person> pagedList = item.stream().skip(page * size).limit(size)
+        final DeferredResult<ResponseEntity<List<Person>>> result = new DeferredResult<>();
+        personService.findAll().subscribe(he -> {
+            final List<Person> pagedList = he.getBody().stream().skip(page * size).limit(size)
                     .collect(Collectors.toCollection(ArrayList::new));
-            deferred.setResult(ResponseEntity.ok(pagedList));
-        }, deferred::setErrorResult);
-        return deferred;
+            result.setResult(toOkResponseEntity(pagedList, he.getHeaders()));
+        }, result::setErrorResult);
+        return result;
     }
 
     @RequestMapping(value = "/people", method = RequestMethod.PUT)
     public DeferredResult<ResponseEntity<Person>> update(@RequestBody @Valid Person person) {
-        DeferredResult<ResponseEntity<Person>> deferred = new DeferredResult<>();
+        DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
 
         personService.update(person).subscribe(
-                personHttpEntity -> deferred.setResult(toResponseEntity(personHttpEntity)), deferred::setErrorResult);
-
-        return deferred;
+                he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
+        return result;
 
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.DELETE)
     public DeferredResult<ResponseEntity<Person>> delete(@PathVariable("id") String id) {
-        DeferredResult<ResponseEntity<Person>> deferred = new DeferredResult<>();
+        DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
         personService.delete(id).subscribe(
-                personHttpEntity -> deferred.setResult(toResponseEntity(personHttpEntity)), deferred::setErrorResult);
-
-        return deferred;
+                he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
+        return result;
     }
 
     @RequestMapping(value = "/people", method = RequestMethod.DELETE)
     public DeferredResult<ResponseEntity<List<Person>>> deleteAll() {
-        final DeferredResult<ResponseEntity<List<Person>>> deferred = new DeferredResult<>();
+        final DeferredResult<ResponseEntity<List<Person>>> result = new DeferredResult<>();
         personService.deleteAll().subscribe(
-                httpEntity -> deferred.setResult(new ResponseEntity<>(
-                        httpEntity.getBody(),
-                        httpEntity.getHeaders(),
-                        httpEntity.getBody() == null ? HttpStatus.ACCEPTED : HttpStatus.OK
-                )), deferred::setErrorResult);
-        return deferred;    }
+                he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
+        return result;    }
 
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperation(HttpServletRequest req, Exception e) {
@@ -134,22 +127,35 @@ public class PersonController {
     @RequestMapping(value = "/people", params = {"filter"}, method = RequestMethod.GET)
     public DeferredResult<ResponseEntity<List<Person>>> findFiltered(@RequestParam("filter") String filter) {
 
-        final DeferredResult<ResponseEntity<List<Person>>> deferred = new DeferredResult<>();
+        final DeferredResult<ResponseEntity<List<Person>>> result = new DeferredResult<>();
         personService.findAll().subscribe(item -> {
-            final List<Person> pagedList = item.stream().filter(
+            final List<Person> pagedList = item.getBody().stream().filter(
                     p -> p.getEmail().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
-            deferred.setResult(ResponseEntity.ok(pagedList));
-        }, deferred::setErrorResult);
-        return deferred;
+            result.setResult(toOkResponseEntity(pagedList, item.getHeaders()));
+        }, result::setErrorResult);
+        return result;
     }
 
-    private static ResponseEntity<Person> toResponseEntity(HttpEntity<Person> personHttpEntity) {
+    /**
+     * Generate a ResponseEntity from the he's body and header; and add in a status
+     * @param he
+     * @param statusWhenNoBody status to populate if a body not available at this time
+     * @return ResponseEntity for sending on the wire
+     */
+    private static  <T> ResponseEntity<T> toResponseEntity(HttpEntity<T> he, HttpStatus statusWhenNoBody) {
         return new ResponseEntity<>(
-                personHttpEntity.getBody(),
-                personHttpEntity.getHeaders(),
-                personHttpEntity.getBody() == null ? HttpStatus.ACCEPTED : HttpStatus.OK
+                he.getBody(),
+                he.getHeaders(),
+                he.getBody() == null ? statusWhenNoBody : HttpStatus.OK
         );
     }
 
+    private static <T> ResponseEntity<List<T>> toOkResponseEntity(List<T> body, HttpHeaders headers) {
+        return new ResponseEntity<>(
+                body,
+                headers,
+                HttpStatus.OK
+        );
+    }
 
 }
