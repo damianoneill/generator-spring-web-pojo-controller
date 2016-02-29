@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 @RestController
 public class PersonController {
 
-    public static final String NOT_AVAILABLE = "Not Available";
-    public static final String FIELD_ERROR_IN_OBJECT = "Field error in object \'";
-    public static final String ON_FIELD = "\' on field \'";
-    public static final String COLON = "\': ";
+    private static final String NOT_AVAILABLE = "Not Available";
+    private static final String FIELD_ERROR_IN_OBJECT = "Field error in object \'";
+    private static final String ON_FIELD = "\' on field \'";
+    private static final String COLON = "\': ";
 
     @Autowired
     private PersonService personService;
@@ -137,8 +137,8 @@ public class PersonController {
     }
 
     /**
-     * Generate a ResponseEntity from the he's body and header; and add in a status
-     * @param he
+     * Generate a ResponseEntity from the HttpEntity's body and header; and add in a status
+     * @param he HttpEntity with (optional) body and (optional) headers
      * @param statusWhenNoBody status to populate if a body not available at this time
      * @return ResponseEntity for sending on the wire
      */

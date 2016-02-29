@@ -47,12 +47,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(locations = "classpath:/testContext.xml")
 public class PersonControllerTestDocumentation {
 
-    public static final String PATH = "/people";
+    private static final String PATH = "/people";
 
     @Rule
     public final RestDocumentation restDocumentation = new RestDocumentation("target/generated-snippets");
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
     private PersonService personService;
