@@ -3,9 +3,14 @@
      * For e.g. http://localhost:8080/<%= nounLowercasePlural %>?filter=...
      */
     @RequestMapping(value = "/<%= nounLowercasePlural %>", params = {"filter"}, method = RequestMethod.GET)
-    public ResponseEntity<List<<%= noun %>>> findFiltered(@RequestParam("filter") String filter) {
-        List<<%= noun %>> filteredList = <%= nounLowercase %>Service.findAll()
-                .stream().filter(p -> p.get<%= filterNameUpper %>().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
-        return new ResponseEntity<>(filteredList, HttpStatus.OK);
+    public DeferredResult<ResponseEntity<List<<%= noun %>>>> findFiltered(@RequestParam("filter") String filter) {
+
+        final DeferredResult<ResponseEntity<List<<%= noun %>>>> result = new DeferredResult<>();
+        <%= nounLowercase %>Service.findAll().subscribe(item -> {
+            final List<<%= noun %>> pagedList = item.getBody().stream().filter(
+                    p -> p.get<%= filterNameUpper %>().equals(filter)).collect(Collectors.toCollection(ArrayList::new));
+            result.setResult(toOkResponseEntity(pagedList, item.getHeaders()));
+        }, result::setErrorResult);
+        return result;
     }
     <% } %>

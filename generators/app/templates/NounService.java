@@ -1,7 +1,9 @@
 package <%= packageName %>.<%= nounLowercase %>;
 
 
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import rx.Observable;
 
 import java.util.List;
 
@@ -14,10 +16,11 @@ public class <%= noun %>Service {
     /**
      * Create an <%= noun %>.
      *
-     * @param <%= nounLowercase %> the <%= nounLowercase %>
-     * @return the <%= nounLowercase %>
+     * @param <%= nounLowercase %> the <%= nounLowercase %> to create
+     * @return an observable that emits a non-null HttpEntity.
      */
-    public <%= noun %> create(<%= noun %> <%= nounLowercase %>) {
+    public Observable<HttpEntity<<%= noun %>>> create(<%= noun %> <%= nounLowercase %>) {
+        // Return entity with a body if request has been fully handled.
         throw new UnsupportedOperationException();
     }
 
@@ -25,18 +28,18 @@ public class <%= noun %>Service {
      * Find one <%= noun %>.
      *
      * @param id the id
-     * @return the <%= nounLowercase %>
+     * @return an observable that emits a non-null HttpEntity.
      */
-    public <%= noun %> findOne(<%= type %> id) {
+    public Observable<HttpEntity<<%= noun %>>> findOne(<%= type %> id) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Find all <%= nounLowercasePlural %>.
      *
-     * @return the list
+     * @return an observable that emits a non-null HttpEntity.
      */
-    public List<<%= noun %>> findAll() {
+    public Observable<HttpEntity<List<<%= noun %>>>> findAll() {
         throw new UnsupportedOperationException();
     }
 
@@ -44,9 +47,9 @@ public class <%= noun %>Service {
      * Update an <%= noun %>.
      *
      * @param <%= nounLowercase %> the <%= nounLowercase %>
-     * @return the <%= nounLowercase %>
+     * @return an observable that emits a non-null HttpEntity.
      */
-    public <%= noun %> update(<%= noun %> <%= nounLowercase %>) {
+    public Observable<HttpEntity<<%= noun %>>> update(<%= noun %> <%= nounLowercase %>) {
         throw new UnsupportedOperationException();
     }
 
@@ -54,15 +57,18 @@ public class <%= noun %>Service {
      * Delete an <%= noun %>.
      *
      * @param id the id
+     * @return an observable that emits a non-null HttpEntity.
      */
-    public void delete(<%= type %> id) {
+    public Observable<HttpEntity<<%= noun %>>> delete(<%= type %> id) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Delete all <%= nounLowercasePlural %>.
+     *
+     * @return an observable that emits a non-null HttpEntity.
      */
-    public void deleteAll() {
+    public Observable<HttpEntity<List<<%= noun %>>>> deleteAll() {
         throw new UnsupportedOperationException();
     }
 }

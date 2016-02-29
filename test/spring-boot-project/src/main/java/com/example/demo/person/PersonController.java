@@ -43,7 +43,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.GET)
-    public DeferredResult<ResponseEntity<Person>> findOne(@PathVariable("id") String id) {
+    public DeferredResult<ResponseEntity<Person>> findOne(@PathVariable("id") Integer id) {
         final DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
 
         personService.findOne(id).subscribe(
@@ -88,7 +88,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.DELETE)
-    public DeferredResult<ResponseEntity<Person>> delete(@PathVariable("id") String id) {
+    public DeferredResult<ResponseEntity<Person>> delete(@PathVariable("id") Integer id) {
         DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
         personService.delete(id).subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
@@ -135,8 +135,7 @@ public class PersonController {
         }, result::setErrorResult);
         return result;
     }
-
-    /**
+        /**
      * Generate a ResponseEntity from the HttpEntity's body and header; and add in a status
      * @param he HttpEntity with (optional) body and (optional) headers
      * @param statusWhenNoBody status to populate if a body not available at this time

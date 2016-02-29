@@ -87,6 +87,7 @@ public class PersonControllerTestDocumentation {
         createPerson(false);
     }
 
+
     public void createPerson(boolean serviceIsBlocking) throws Exception {
         final Person person = new Person();
         /* TODO - Configure the Person's object state. eg;
@@ -98,81 +99,79 @@ public class PersonControllerTestDocumentation {
         person.setEmail("person@email.com");
 
         when(personService.create(person)).thenReturn(
-                Observable.just(new HttpEntity<>(
-                        serviceIsBlocking ? person: null,
-                        new HttpHeaders())));
+        Observable.just(new HttpEntity<>(
+                serviceIsBlocking ? person: null,
+                new HttpHeaders())));
 
 
         MvcResult mvcResult = this.mockMvc
-                .perform(post(PATH)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(prettyPrintRequest(this.objectMapper.writeValueAsString(person))))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted()).andReturn();
+        .perform(post(PATH)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(prettyPrintRequest(this.objectMapper.writeValueAsString(person))))
+        .andExpect(status().isOk())
+        .andExpect(request().asyncStarted()).andReturn();
 
         this.mockMvc
-                .perform(asyncDispatch(mvcResult))
-                .andExpect(serviceIsBlocking ? status().isOk(): status().isAccepted() )
-                .andDo(document(
-                        "{class-name}/{method-name}",
-                        preprocessResponse(prettyPrint()),
-                        requestFields(
+        .perform(asyncDispatch(mvcResult))
+        .andExpect(serviceIsBlocking ? status().isOk(): status().isAccepted() )
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint()),
+        requestFields(
                             /* TODO - Describe all mandatory and optional Person JSON request fields. eg;
                              * requestFields(fieldWithPath("mandatoryProperty").description("The Person mandatory mandatoryProperty value.")
                              *  .attributes(key("constraints").value("Must not be null. Must not be empty"))
                              * requestFields((fieldWithPath("optionalProperty").description("The Person optional optionalProperty value.").optional()
                              */
-                            fieldWithPath("name").description("The Person's name")
-                                .attributes(key("constraints").value("Must not be null. Must not be empty")),
-                            fieldWithPath("age").description("The Person's age"),
-                            fieldWithPath("email").description("The Person email address")
-                        )));
+        fieldWithPath("name").description("The Person's name")
+        .attributes(key("constraints").value("Must not be null. Must not be empty")),
+        fieldWithPath("age").description("The Person's age"),
+        fieldWithPath("email").description("The Person email address")
+        )));
         verify(personService, atLeastOnce()).create(person);
     }
 
-    @Test
-    public void findOnePerson() throws Exception {
-        final Person expected = new Person();
-        when(personService.findOne("99")).thenReturn(Observable.just(new HttpEntity<>(expected, new HttpHeaders())));
-
-
-        MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", 99)).
-                andExpect(status().isOk())
-                .andExpect(request().asyncStarted()).andReturn();
+@Test
+public void findOnePerson() throws Exception {
+final Person expected = new Person();
+        when(personService.findOne(any(Integer.class))).thenReturn(Observable.just(new HttpEntity<>(expected, new HttpHeaders())));
+        MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "99")).
+        andExpect(status().isOk())
+        .andExpect(request().asyncStarted()).andReturn();
 
         this.mockMvc
-                .perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andDo(document(
-                        "{class-name}/{method-name}",
-                preprocessResponse(prettyPrint()),
+        .perform(asyncDispatch(mvcResult))
+        .andExpect(status().isOk())
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint()),
                 /* TODO - Replace response fields for the Person object. eg;
                  * responseFields((fieldWithPath("someProperty").description("The Person someProperty value."))
                  * responseFields((fieldWithPath("optionalProperty").description("The Person optional optionalProperty value.").optional()
                  */
-                responseFields(
-                    fieldWithPath("name").description("The Person's name"),
-                    fieldWithPath("age").description("The Person's age"),
-                    fieldWithPath("email").description("The Person's email address")
-                )));
-        verify(personService, atLeastOnce()).findOne("99");
-    }
+        responseFields(
+        fieldWithPath("name").description("The Person's name"),
+        fieldWithPath("age").description("The Person's age"),
+        fieldWithPath("email").description("The Person's email address")
+        )));
+        verify(personService, atLeastOnce()).findOne(any(Integer.class));
+        }
 
-    @Test
-    public void findOnePersonNotFound() throws Exception {
-        when(personService.findOne("invalid")).thenReturn(Observable.just(new HttpEntity(null)));
+@Test
+public void findOnePersonNotFound() throws Exception {
+        when(personService.findOne(any(Integer.class))).thenReturn(Observable.just(new HttpEntity(null)));
 
-        MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "invalid"))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn();
+        MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "1234"))
+        .andExpect(status().isOk())
+        .andExpect(request().asyncStarted())
+        .andReturn();
 
         this.mockMvc.perform(asyncDispatch(mvcResult)).andExpect(status().isNotFound())
-                .andDo(document(
-                "{class-name}/{method-name}",
-                preprocessResponse(prettyPrint())));
-        verify(personService, atLeastOnce()).findOne("invalid");
-    }
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint())));
+        verify(personService, atLeastOnce()).findOne(any(Integer.class));
+        }
 
     @Test
     public void findAllPeople() throws Exception {
@@ -186,24 +185,24 @@ public class PersonControllerTestDocumentation {
         when(personService.findAll()).thenReturn(Observable.just(new HttpEntity<>(expected)));
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted()).andReturn();
+        .andExpect(status().isOk())
+        .andExpect(request().asyncStarted()).andReturn();
 
         this.mockMvc
-                .perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-            .andDo(document(
-                    "{class-name}/{method-name}",
-                    preprocessResponse(prettyPrint()),
+        .perform(asyncDispatch(mvcResult))
+        .andExpect(status().isOk())
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint()),
                     /* TODO - If necessary, describe the findAll response fields (typically wrapped in an array) eg;
                      * responseFields((fieldWithPath("[]").description("An array of Persons"))
                      * responseFields((fieldWithPath("[].property").description("The Person property value."))
                      */
-                    responseFields(
-                        fieldWithPath("[]").description("An array of Persons"))
-                ));
+        responseFields(
+            fieldWithPath("[]").description("An array of Persons"))
+        ));
         verify(personService, atLeastOnce()).findAll();
-    }
+        }
 
     @Test
     public void findAllPeoplePaginated() throws Exception {
@@ -215,44 +214,44 @@ public class PersonControllerTestDocumentation {
          * Needs to be greater than the requested page size in order for pagination.
          */
         for (int i = 0; i < TOTAL; i++) {
-            final Person person = new Person();
-            person.setName("name" + i);
-            expected.add(person);
+        final Person person = new Person();
+        person.setName("name" + i);
+        expected.add(person);
         }
         when(personService.findAll()).thenReturn(Observable.just(new HttpEntity<>(expected)));
 
         MvcResult mvcResult =
-                this.mockMvc
+        this.mockMvc
                 .perform(get(PATH)
                         /* TODO - Configure the page index to get and the total number per page. eg;
                          * Get the 2nd page, where each page contains half the total collection
                          */
-                .param("page", "1")
-                .param("size", String.valueOf(PER_PAGE)))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted()).andReturn();
+        .param("page", "1")
+        .param("size", String.valueOf(PER_PAGE)))
+        .andExpect(status().isOk())
+        .andExpect(request().asyncStarted()).andReturn();
 
 
         this.mockMvc
-                .perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(PER_PAGE)))
-                // TODO - Verify the 1st object in the response is the expected object (after pagination)
-                .andExpect(jsonPath("$[0].name", is("name" + PER_PAGE)))
-                .andDo(document(
-                        "{class-name}/{method-name}",
-                        preprocessResponse(prettyPrint()),
+        .perform(asyncDispatch(mvcResult))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(PER_PAGE)))
+        // TODO - Verify the 1st object in the response is the expected object (after pagination)
+        .andExpect(jsonPath("$[0].name", is("name" + PER_PAGE)))
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint()),
                         /* TODO - Describe the parameters for the paginated request.
                          * parameterWithName("page").description("The requested page index")
                          * parameterWithName("size").description("The requested number of people per page")
                          */
-                        requestParameters(
-                                parameterWithName("page").description("The requested page index"),
-                                parameterWithName("size").description("The requested number of people per page")
-                        )));
+        requestParameters(
+        parameterWithName("page").description("The requested page index"),
+        parameterWithName("size").description("The requested number of people per page")
+        )));
 
         verify(personService, atLeastOnce()).findAll();
-    }
+        }
 
     @Test
     public void updatePersonSynchronously() throws Exception {
@@ -279,41 +278,40 @@ public class PersonControllerTestDocumentation {
 
 
         when(personService.update(original)).thenReturn(
-                Observable.just(new HttpEntity<>(serviceIsBlocking ? updated: null, new HttpHeaders())));
-
+            Observable.just(new HttpEntity<>(serviceIsBlocking ? updated: null, new HttpHeaders())));
         MvcResult mvcResult = this.mockMvc.perform(put(PATH)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(prettyPrintRequest(this.objectMapper.writeValueAsString(original))))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted()).andReturn();
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(prettyPrintRequest(this.objectMapper.writeValueAsString(original))))
+        .andExpect(status().isOk())
+        .andExpect(request().asyncStarted()).andReturn();
 
         ResultActions resultActions = this.mockMvc
-                .perform(asyncDispatch(mvcResult))
-                .andExpect(serviceIsBlocking ? status().isOk() : status().isAccepted())
-                // TODO - Verify the updated object was returned eg;
-                .andDo(document(
-                        "{class-name}/{method-name}",
-                        preprocessResponse(prettyPrint()),
+        .perform(asyncDispatch(mvcResult))
+        .andExpect(serviceIsBlocking ? status().isOk() : status().isAccepted())
+        // TODO - Verify the updated object was returned eg;
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint()),
                         /* TODO - If necessary, describe JSON request fields. eg;
                          * requestFields(fieldWithPath("mandatoryProperty").description("The Person mandatory mandatoryProperty value.")
                          *  .attributes(key("constraints").value("Must not be null. Must not be empty"))
                          * requestFields((fieldWithPath("optionalProperty").description("The Person optional optionalProperty value.").optional()
                          */
-                        requestFields(
-                                fieldWithPath("name").description("The Person's name")
-                                        .attributes(key("constraints").value("Must not be null. Must not be empty")),
-                                fieldWithPath("age").description("The Person's age"),
-                                fieldWithPath("email").description("The Person email address")
-                        )));
+        requestFields(
+        fieldWithPath("name").description("The Person's name")
+        .attributes(key("constraints").value("Must not be null. Must not be empty")),
+        fieldWithPath("age").description("The Person's age"),
+        fieldWithPath("email").description("The Person email address")
+        )));
 
         if (serviceIsBlocking) {
             resultActions.andExpect(
-                    jsonPath("$.name", is(unchangedValue)))
-                    .andExpect(jsonPath("$.age", is(20)));
+            jsonPath("$.name", is(unchangedValue)))
+            .andExpect(jsonPath("$.age", is(20)));
         }
 
         verify(personService, atLeastOnce()).update(original);
-    }
+        }
 
     @Test
     public void deletePersonSynchronously() throws Exception {
@@ -333,29 +331,29 @@ public class PersonControllerTestDocumentation {
         deleted.setAge(20);
 
 
-        when(personService.delete("20")).thenReturn(
-                Observable.just(new HttpEntity<>(serviceIsBlocking ? deleted: null, new HttpHeaders())));
+        when(personService.delete(any(Integer.class))).thenReturn(
+        Observable.just(new HttpEntity<>(serviceIsBlocking ? deleted: null, new HttpHeaders())));
 
 
         MvcResult mvcResult = this.mockMvc
-                .perform(delete(PATH + "/{id}", "20"))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted()).andReturn();
+        .perform(delete(PATH + "/{id}", "99"))
+        .andExpect(status().isOk())
+        .andExpect(request().asyncStarted()).andReturn();
 
         this.mockMvc
-                .perform(asyncDispatch(mvcResult))
-                .andExpect(serviceIsBlocking ? status().isOk() : status().isAccepted())
-                .andDo(document(
-                        "{class-name}/{method-name}",
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(
+        .perform(asyncDispatch(mvcResult))
+        .andExpect(serviceIsBlocking ? status().isOk() : status().isAccepted())
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint()),
+        pathParameters(
                              /* TODO - Describe the path parameter. eg;
                              * parameterWithName("id").description("The name of the Person to delete")),
                              */
-                                parameterWithName("id").description("The name of the Person to delete")
-                        )));
-        verify(personService, atLeastOnce()).delete("20");
-    }
+        parameterWithName("id").description("The name of the Person to delete")
+        )));
+        verify(personService, atLeastOnce()).delete(any(Integer.class));
+        }
 
     @Test
     public void deleteAllPeopleSynchronously() throws Exception {
@@ -369,44 +367,44 @@ public class PersonControllerTestDocumentation {
 
     public void deleteAllPeople(boolean serviceIsBlocking) throws Exception {
 
-        final Person person = new Person();
-        /* TODO - Configure and add at least one Person to the expected List.
-         * person.setId("id");
-         */
-        final List<Person> expected = new ArrayList<>();
+    final Person person = new Person();
+    /* TODO - Configure and add at least one Person to the expected List.
+    * person.setId("id");
+    */
+    final List<Person> expected = new ArrayList<>();
         expected.add(person);
 
         when(personService.deleteAll()).thenReturn(
-                Observable.just(new HttpEntity<>(serviceIsBlocking ? expected : null, new HttpHeaders())));
+        Observable.just(new HttpEntity<>(serviceIsBlocking ? expected : null, new HttpHeaders())));
 
         MvcResult mvcResult = this.mockMvc.perform(delete(PATH))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted()).andReturn();
+        .andExpect(status().isOk())
+        .andExpect(request().asyncStarted()).andReturn();
 
         if (serviceIsBlocking) {
-            this.mockMvc
-                    .perform(asyncDispatch(mvcResult))
-                    .andExpect(status().isOk())
-                    .andDo(document(
-                            "{class-name}/{method-name}",
-                            preprocessResponse(prettyPrint()),
-                            responseFields(
-                                    fieldWithPath("[]").description("An array of Persons"))
-                    ));
+        this.mockMvc
+        .perform(asyncDispatch(mvcResult))
+        .andExpect(status().isOk())
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint()),
+        responseFields(
+        fieldWithPath("[]").description("An array of Persons"))
+        ));
         } else {
-            this.mockMvc
-                    .perform(asyncDispatch(mvcResult))
-                    .andExpect(status().isAccepted())
-                    .andDo(document(
-                            "{class-name}/{method-name}",
-                            preprocessResponse(prettyPrint())
-                    ));
+        this.mockMvc
+        .perform(asyncDispatch(mvcResult))
+        .andExpect(status().isAccepted())
+        .andDo(document(
+        "{class-name}/{method-name}",
+        preprocessResponse(prettyPrint())
+        ));
         }
 
         verify(personService, atLeastOnce()).deleteAll();
-    }
+ }
 
-        
+    
     @Test
     public void findAllPeopleFiltered() throws Exception {
         /* TODO - Configure and add matching and non-matching people to a List.
