@@ -1,6 +1,7 @@
 package com.example.demo.person;
 
 import com.example.demo.ClientErrorInformation;
+import static com.example.demo.ControllerHelper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -134,27 +135,6 @@ public class PersonController {
             result.setResult(toOkResponseEntity(pagedList, item.getHeaders()));
         }, result::setErrorResult);
         return result;
-    }
-        /**
-     * Generate a ResponseEntity from the HttpEntity's body and header; and add in a status
-     * @param he HttpEntity with (optional) body and (optional) headers
-     * @param statusWhenNoBody status to populate if a body not available at this time
-     * @return ResponseEntity for sending on the wire
-     */
-    private static  <T> ResponseEntity<T> toResponseEntity(HttpEntity<T> he, HttpStatus statusWhenNoBody) {
-        return new ResponseEntity<>(
-                he.getBody(),
-                he.getHeaders(),
-                he.getBody() == null ? statusWhenNoBody : HttpStatus.OK
-        );
-    }
-
-    private static <T> ResponseEntity<List<T>> toOkResponseEntity(List<T> body, HttpHeaders headers) {
-        return new ResponseEntity<>(
-                body,
-                headers,
-                HttpStatus.OK
-        );
     }
 
 }
