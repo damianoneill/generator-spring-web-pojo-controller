@@ -2,17 +2,14 @@ package <%= packageName %>.<%= nounLowercase %>;
 
 import <%= packageName %>.ClientErrorInformation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -27,59 +24,83 @@ import java.util.stream.Collectors;
 @RestController
 public class <%= noun %>Controller {
 
-    public static final String NOT_AVAILABLE = "Not Available";
-    public static final String FIELD_ERROR_IN_OBJECT = "Field error in object \'";
-    public static final String ON_FIELD = "\' on field \'";
-    public static final String COLON = "\': ";
+    private static final String NOT_AVAILABLE = "Not Available";
+    private static final String FIELD_ERROR_IN_OBJECT = "Field error in object \'";
+    private static final String ON_FIELD = "\' on field \'";
+    private static final String COLON = "\': ";
 
     @Autowired
     private <%= noun %>Service <%= nounLowercase %>Service;
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.POST)
-    public ResponseEntity<<%= noun %>> create(@RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
-        return new ResponseEntity<>(<%= nounLowercase %>Service.create(<%= nounLowercase %>), HttpStatus.CREATED);
+    public DeferredResult<ResponseEntity<<%= noun %>>> create(@RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
+        DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
+
+        <%= nounLowercase %>Service.create(<%= nounLowercase %>).subscribe(
+                he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
+
+        return result;
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.GET)
-    public ResponseEntity<<%= noun %>> findOne(@PathVariable("id") <%= type %> id) {
-        <%= noun %> <%= nounLowercase %> = <%= nounLowercase %>Service.findOne(id);
-        if (<%= nounLowercase %> == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(<%= nounLowercase %>, HttpStatus.OK);
+    public DeferredResult<ResponseEntity<<%= noun %>>> findOne(@PathVariable("id") <%= type %> id) {
+        final DeferredResult<ResponseEntity<<%=noun%>>> result = new DeferredResult<>();
+
+        <%=nounLowercase%>Service.findOne(id).subscribe(
+                he -> result.setResult(toResponseEntity(he, HttpStatus.NOT_FOUND)),
+                result::setErrorResult);
+
+        return result;
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.GET)
-    public ResponseEntity<List<<%= noun %>>> findAll() {
-        return new ResponseEntity<>(<%= nounLowercase %>Service.findAll(), HttpStatus.OK);
+    public DeferredResult<ResponseEntity<List<<%= noun %>>>> findAll() {
+        final DeferredResult<ResponseEntity<List<<%= noun %>>>> result = new DeferredResult<>();
+        <%=nounLowercase%>Service.findAll().subscribe(
+                he -> result.setResult(
+                        toOkResponseEntity(he.getBody(), he.getHeaders())),
+                result::setErrorResult);
+        return result;
     }
 
     /**
      * For e.g. http://localhost:8080/<%= nounLowercasePlural %>?page=0&size=2
      */
     @RequestMapping(value = "/<%= nounLowercasePlural %>", params = {"page", "size"}, method = RequestMethod.GET)
-    public ResponseEntity<List<<%= noun %>>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
-        List<<%= noun %>> pagedList = <%= nounLowercase %>Service.findAll()
-                .stream().skip(page * size).limit(size).collect(Collectors.toCollection(ArrayList::new));
-        return new ResponseEntity<>(pagedList, HttpStatus.OK);
+    public DeferredResult<ResponseEntity<List<<%= noun %>>>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
+        final DeferredResult<ResponseEntity<List<<%= noun %>>>> result = new DeferredResult<>();
+        <%= nounLowercase %>Service.findAll().subscribe(he -> {
+            final List<<%= noun %>> pagedList = he.getBody().stream().skip(page * size).limit(size)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            result.setResult(toOkResponseEntity(pagedList, he.getHeaders()));
+        }, result::setErrorResult);
+        return result;
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.PUT)
-    public ResponseEntity<<%= noun %>> update(@RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
-        return new ResponseEntity<>(<%= nounLowercase %>Service.update(<%= nounLowercase %>), HttpStatus.OK);
+    public DeferredResult<ResponseEntity<<%= noun %>>> update(@RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
+        DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
+
+        <%= nounLowercase %>Service.update(<%= nounLowercase %>).subscribe(
+                he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
+        return result;
+
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable("id") <%= type %> id) {
-        <%= nounLowercase %>Service.delete(id);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+    public DeferredResult<ResponseEntity<<%= noun %>>> delete(@PathVariable("id") <%= type %> id) {
+        DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
+        <%= nounLowercase %>Service.delete(id).subscribe(
+                he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
+        return result;
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteAll() {
-        <%= nounLowercase %>Service.deleteAll();
-        return new ResponseEntity<Void>(HttpStatus.OK);
-    }
+    public DeferredResult<ResponseEntity<List<<%= noun %>>>> deleteAll() {
+        final DeferredResult<ResponseEntity<List<<%= noun %>>>> result = new DeferredResult<>();
+        <%= nounLowercase %>Service.deleteAll().subscribe(
+                he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
+        return result;    }
 
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperation(HttpServletRequest req, Exception e) {
@@ -100,5 +121,26 @@ public class <%= noun %>Controller {
     }
 
     <%- include snippets/NounController-with-filter.ejs -%>
+    /**
+     * Generate a ResponseEntity from the HttpEntity's body and header; and add in a status
+     * @param he HttpEntity with (optional) body and (optional) headers
+     * @param statusWhenNoBody status to populate if a body not available at this time
+     * @return ResponseEntity for sending on the wire
+     */
+    private static  <T> ResponseEntity<T> toResponseEntity(HttpEntity<T> he, HttpStatus statusWhenNoBody) {
+        return new ResponseEntity<>(
+                he.getBody(),
+                he.getHeaders(),
+                he.getBody() == null ? statusWhenNoBody : HttpStatus.OK
+        );
+    }
+
+    private static <T> ResponseEntity<List<T>> toOkResponseEntity(List<T> body, HttpHeaders headers) {
+        return new ResponseEntity<>(
+                body,
+                headers,
+                HttpStatus.OK
+        );
+    }
 
 }

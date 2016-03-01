@@ -6,30 +6,36 @@
          * verify filter returns the correct collection.
          */
         final <%= noun %> matching = new <%= noun %>();
-        matching.set<%= filterNameUpper %>("matching");
+        matching.setEmail("matching");
         final <%= noun %> nonMatching = new <%= noun %>();
-        nonMatching.set<%= filterNameUpper %>("nonMatching");
+        nonMatching.setEmail("nonMatching");
         final List<<%= noun %>> <%= nounLowercasePlural %> = new ArrayList<>();
         <%= nounLowercasePlural %>.add(matching);
         <%= nounLowercasePlural %>.add(nonMatching);
 
-        when(<%= nounLowercase %>Service.findAll()).thenReturn(<%= nounLowercasePlural %>);
+        when(<%= nounLowercase %>Service.findAll()).thenReturn(Observable.just(new HttpEntity<>(<%= nounLowercasePlural %>)));
+
+        MvcResult mvcResult = this.mockMvc.perform(get(PATH)
+                // TODO - Configure the filter parameter eg; email="matching"
+                .param("filter", "matching")).
+
+                andExpect(status().isOk())
+                .andExpect(request().asyncStarted()).andReturn();
+
         this.mockMvc
-                .perform(get(PATH)
-                        // TODO - Configure the filter parameter eg; <%= filterName %>="matching"
-                        .param("filter", "matching"))
+                .perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 /* TODO - Configure and verify the size of the returned array.
                  * Also verify the results are as expected when filtered
                  */
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].<%= filterName %>", is("matching")))
+                .andExpect(jsonPath("$[0].email", is("matching")))
                 .andDo(document(
                         "{class-name}/{method-name}",
                         preprocessResponse(prettyPrint()),
                         // TODO - Describe the parameters for the filtered value.
                         requestParameters(
-                                parameterWithName("filter").description("The filter value for the <%= noun %>'s <%= filterName %>")
+                                parameterWithName("filter").description("The filter value for the <%= noun %>'s email")
                         )));
         verify(<%= nounLowercase %>Service, atLeastOnce()).findAll();
     }

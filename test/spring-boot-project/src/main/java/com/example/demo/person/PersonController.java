@@ -135,8 +135,7 @@ public class PersonController {
         }, result::setErrorResult);
         return result;
     }
-
-    /**
+        /**
      * Generate a ResponseEntity from the HttpEntity's body and header; and add in a status
      * @param he HttpEntity with (optional) body and (optional) headers
      * @param statusWhenNoBody status to populate if a body not available at this time

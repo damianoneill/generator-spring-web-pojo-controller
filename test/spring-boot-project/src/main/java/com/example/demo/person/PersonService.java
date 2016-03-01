@@ -65,8 +65,8 @@ public class PersonService {
 
     /**
      * Delete all people.
+     *
      * @return an observable that emits a non-null HttpEntity.
-
      */
     public Observable<HttpEntity<List<Person>>> deleteAll() {
         throw new UnsupportedOperationException();
