@@ -43,7 +43,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.GET)
-    public DeferredResult<ResponseEntity<Person>> findOne(@PathVariable("id") Integer id) {
+    public DeferredResult<ResponseEntity<Person>> findOne(@PathVariable("id") String id) {
         final DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
 
         personService.findOne(id).subscribe(
@@ -88,7 +88,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/people/{id}", method = RequestMethod.DELETE)
-    public DeferredResult<ResponseEntity<Person>> delete(@PathVariable("id") Integer id) {
+    public DeferredResult<ResponseEntity<Person>> delete(@PathVariable("id") String id) {
         DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
         personService.delete(id).subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);

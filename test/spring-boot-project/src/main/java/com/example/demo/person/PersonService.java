@@ -30,7 +30,7 @@ public class PersonService {
      * @param id the id
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<Person>> findOne(Integer id) {
+    public Observable<HttpEntity<Person>> findOne(String id) {
         throw new UnsupportedOperationException();
     }
 
@@ -59,7 +59,7 @@ public class PersonService {
      * @param id the id
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<Person>> delete(Integer id) {
+    public Observable<HttpEntity<Person>> delete(String id) {
         throw new UnsupportedOperationException();
     }
 

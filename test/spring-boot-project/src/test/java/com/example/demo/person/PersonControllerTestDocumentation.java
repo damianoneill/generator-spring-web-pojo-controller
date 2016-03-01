@@ -134,7 +134,7 @@ public class PersonControllerTestDocumentation {
 @Test
 public void findOnePerson() throws Exception {
 final Person expected = new Person();
-        when(personService.findOne(any(Integer.class))).thenReturn(Observable.just(new HttpEntity<>(expected, new HttpHeaders())));
+        when(personService.findOne(any(String.class))).thenReturn(Observable.just(new HttpEntity<>(expected, new HttpHeaders())));
         MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "99")).
         andExpect(status().isOk())
         .andExpect(request().asyncStarted()).andReturn();
@@ -154,12 +154,12 @@ final Person expected = new Person();
         fieldWithPath("age").description("The Person's age"),
         fieldWithPath("email").description("The Person's email address")
         )));
-        verify(personService, atLeastOnce()).findOne(any(Integer.class));
+        verify(personService, atLeastOnce()).findOne(any(String.class));
         }
 
 @Test
 public void findOnePersonNotFound() throws Exception {
-        when(personService.findOne(any(Integer.class))).thenReturn(Observable.just(new HttpEntity(null)));
+        when(personService.findOne(any(String.class))).thenReturn(Observable.just(new HttpEntity(null)));
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "1234"))
         .andExpect(status().isOk())
@@ -170,7 +170,7 @@ public void findOnePersonNotFound() throws Exception {
         .andDo(document(
         "{class-name}/{method-name}",
         preprocessResponse(prettyPrint())));
-        verify(personService, atLeastOnce()).findOne(any(Integer.class));
+        verify(personService, atLeastOnce()).findOne(any(String.class));
         }
 
     @Test
@@ -331,7 +331,7 @@ public void findOnePersonNotFound() throws Exception {
         deleted.setAge(20);
 
 
-        when(personService.delete(any(Integer.class))).thenReturn(
+        when(personService.delete(any(String.class))).thenReturn(
         Observable.just(new HttpEntity<>(serviceIsBlocking ? deleted: null, new HttpHeaders())));
 
 
@@ -352,7 +352,7 @@ public void findOnePersonNotFound() throws Exception {
                              */
         parameterWithName("id").description("The name of the Person to delete")
         )));
-        verify(personService, atLeastOnce()).delete(any(Integer.class));
+        verify(personService, atLeastOnce()).delete(any(String.class));
         }
 
     @Test
