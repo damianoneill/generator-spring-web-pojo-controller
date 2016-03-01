@@ -12,6 +12,9 @@ import java.util.List;
  */
 public class ControllerHelper {
 
+    private ControllerHelper() {
+    }
+
     /**
      * Generate a ResponseEntity from the HttpEntity's body and header; and add in a status
      *
