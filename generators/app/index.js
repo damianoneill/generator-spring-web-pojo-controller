@@ -93,6 +93,12 @@ module.exports = yeoman.generators.Base.extend({
       }
     );
     this.fs.copyTpl(
+      this.templatePath('ControllerHelper.java'),
+      this.destinationPath(srcDir + packagePath + '/ControllerHelper.java'), {
+        packageName: this.properties.packageName
+      }
+    );
+    this.fs.copyTpl(
       this.templatePath('NounController.java'),
       this.destinationPath(srcDir + packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Controller.java'), {
         packageName: this.properties.packageName,

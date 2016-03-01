@@ -1,7 +1,6 @@
 package com.example.demo.person;
 
 import com.example.demo.ClientErrorInformation;
-import static com.example.demo.ControllerHelper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,7 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +22,9 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.demo.ControllerHelper.toOkResponseEntity;
+import static com.example.demo.ControllerHelper.toResponseEntity;
 
 /**
  * The Person REST Controller.
@@ -101,7 +109,8 @@ public class PersonController {
         final DeferredResult<ResponseEntity<List<Person>>> result = new DeferredResult<>();
         personService.deleteAll().subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
-        return result;    }
+        return result;
+    }
 
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperation(HttpServletRequest req, Exception e) {
@@ -136,5 +145,5 @@ public class PersonController {
         }, result::setErrorResult);
         return result;
     }
-
+    
 }

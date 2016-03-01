@@ -16,6 +16,9 @@ describe('generator-spring-web-pojo-controller:app', function () {
       'com/example/demo/ClientErrorInformation.java'
     ]);
     assert.file([
+      'com/example/demo/ControllerHelper.java'
+    ]);
+    assert.file([
       'com/example/demo/person/PersonController.java'
     ]);
     assert.file([

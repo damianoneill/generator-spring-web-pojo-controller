@@ -8,7 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +22,9 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static <%= packageName %>.ControllerHelper.toOkResponseEntity;
+import static <%= packageName %>.ControllerHelper.toResponseEntity;
 
 /**
  * The <%= noun %> REST Controller.
@@ -100,7 +109,8 @@ public class <%= noun %>Controller {
         final DeferredResult<ResponseEntity<List<<%= noun %>>>> result = new DeferredResult<>();
         <%= nounLowercase %>Service.deleteAll().subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
-        return result;    }
+        return result;
+    }
 
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<ClientErrorInformation> handleUnsupportedOperation(HttpServletRequest req, Exception e) {
@@ -121,26 +131,5 @@ public class <%= noun %>Controller {
     }
 
     <%- include snippets/NounController-with-filter.ejs -%>
-    /**
-     * Generate a ResponseEntity from the HttpEntity's body and header; and add in a status
-     * @param he HttpEntity with (optional) body and (optional) headers
-     * @param statusWhenNoBody status to populate if a body not available at this time
-     * @return ResponseEntity for sending on the wire
-     */
-    private static  <T> ResponseEntity<T> toResponseEntity(HttpEntity<T> he, HttpStatus statusWhenNoBody) {
-        return new ResponseEntity<>(
-                he.getBody(),
-                he.getHeaders(),
-                he.getBody() == null ? statusWhenNoBody : HttpStatus.OK
-        );
-    }
-
-    private static <T> ResponseEntity<List<T>> toOkResponseEntity(List<T> body, HttpHeaders headers) {
-        return new ResponseEntity<>(
-                body,
-                headers,
-                HttpStatus.OK
-        );
-    }
 
 }
