@@ -46,10 +46,11 @@ public class PersonService {
     /**
      * Update an Person.
      *
+     * @param id the id
      * @param person the person
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<Person>> update(Person person) {
+    public Observable<HttpEntity<Person>> update(String id, Person person) {
         throw new UnsupportedOperationException();
     }
 
