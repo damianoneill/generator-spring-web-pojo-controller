@@ -84,11 +84,11 @@ public class PersonController {
         return result;
     }
 
-    @RequestMapping(value = "/people", method = RequestMethod.PUT)
-    public DeferredResult<ResponseEntity<Person>> update(@RequestBody @Valid Person person) {
+    @RequestMapping(value = "/people/{id}", method = RequestMethod.PUT)
+    public DeferredResult<ResponseEntity<Person>> update(@PathVariable("id") String id, @RequestBody @Valid Person person) {
         DeferredResult<ResponseEntity<Person>> result = new DeferredResult<>();
 
-        personService.update(person).subscribe(
+        personService.update(id, person).subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
         return result;
 
