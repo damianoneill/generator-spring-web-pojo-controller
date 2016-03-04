@@ -58,7 +58,9 @@ public class PersonControllerTestDocumentation {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
+
     private PersonService personService;
+
 
     @InjectMocks
     private PersonController controller;
@@ -277,7 +279,7 @@ public void findOnePersonNotFound() throws Exception {
         updated.setAge(20);
 
 
-        when(personService.update("99", original)).thenReturn(
+        when(personService.update(any(String.class), eq(original))).thenReturn(
             Observable.just(new HttpEntity<>(serviceIsBlocking ? updated: null, new HttpHeaders())));
         MvcResult mvcResult = this.mockMvc.perform(put(PATH + "/{id}", "99")
         .contentType(MediaType.APPLICATION_JSON)
@@ -310,7 +312,7 @@ public void findOnePersonNotFound() throws Exception {
             .andExpect(jsonPath("$.age", is(20)));
         }
 
-        verify(personService, atLeastOnce()).update("99", original);
+        verify(personService, atLeastOnce()).update(any(String.class), eq(original));
         }
 
     @Test

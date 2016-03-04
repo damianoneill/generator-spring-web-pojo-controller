@@ -58,7 +58,11 @@ public class <%= noun %>ControllerTestDocumentation {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
+<%if (asynchYesNo) { %>
+    private <%= noun %>ServiceAsynch <%= nounLowercase %>Service;
+<% } else {%>
     private <%= noun %>Service <%= nounLowercase %>Service;
+<%} %>
 
     @InjectMocks
     private <%= noun %>Controller controller;
@@ -277,7 +281,7 @@ public void findOne<%= noun %>NotFound() throws Exception {
         updated.setAge(20);
 
 
-        when(<%= nounLowercase %>Service.update("99", original)).thenReturn(
+        when(<%= nounLowercase %>Service.update(any(<%= type %>.class), eq(original))).thenReturn(
             Observable.just(new HttpEntity<>(serviceIsBlocking ? updated: null, new HttpHeaders())));
         MvcResult mvcResult = this.mockMvc.perform(put(PATH + "/{id}", "99")
         .contentType(MediaType.APPLICATION_JSON)
@@ -310,7 +314,7 @@ public void findOne<%= noun %>NotFound() throws Exception {
             .andExpect(jsonPath("$.age", is(20)));
         }
 
-        verify(<%= nounLowercase %>Service, atLeastOnce()).update("99", original);
+        verify(<%= nounLowercase %>Service, atLeastOnce()).update(any(<%= type %>.class), eq(original));
         }
 
     @Test

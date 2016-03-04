@@ -37,7 +37,11 @@ class <%= noun %>Controller {
     private static final String COLON = "\': ";
 
     @Autowired
+<%if (asynchYesNo) { %>
+    private <%= noun %>ServiceAsynch <%= nounLowercase %>Service;
+<% } else {%>
     private <%= noun %>Service <%= nounLowercase %>Service;
+<%} %>
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.POST)
     public DeferredResult<ResponseEntity<<%= noun %>>> create(@RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
