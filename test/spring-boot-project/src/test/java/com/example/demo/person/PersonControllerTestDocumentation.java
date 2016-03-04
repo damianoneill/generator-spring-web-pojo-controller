@@ -58,7 +58,7 @@ public class PersonControllerTestDocumentation {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
-    private PersonServiceAsynch personService;
+    private PersonService personService;
 
     @InjectMocks
     private PersonController controller;

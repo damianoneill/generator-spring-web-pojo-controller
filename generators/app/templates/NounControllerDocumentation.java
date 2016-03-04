@@ -159,7 +159,7 @@ final <%= noun %> expected = new <%= noun %>();
 
 @Test
 public void findOne<%= noun %>NotFound() throws Exception {
-        when(<%= nounLowercase %>Service.findOne(any(<%= type %>.class))).thenReturn(Observable.just(new HttpEntity(null)));
+        when(<%= nounLowercase %>Service.findOne(any(<%= type %>.class))).thenReturn(Observable.just(new HttpEntity<>(null, null)));
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "1234"))
         .andExpect(status().isOk())
@@ -277,9 +277,9 @@ public void findOne<%= noun %>NotFound() throws Exception {
         updated.setAge(20);
 
 
-        when(<%= nounLowercase %>Service.update(original)).thenReturn(
+        when(<%= nounLowercase %>Service.update("99", original)).thenReturn(
             Observable.just(new HttpEntity<>(serviceIsBlocking ? updated: null, new HttpHeaders())));
-        MvcResult mvcResult = this.mockMvc.perform(put(PATH)
+        MvcResult mvcResult = this.mockMvc.perform(put(PATH + "/{id}", "99")
         .contentType(MediaType.APPLICATION_JSON)
         .content(prettyPrintRequest(this.objectMapper.writeValueAsString(original))))
         .andExpect(status().isOk())
@@ -310,7 +310,7 @@ public void findOne<%= noun %>NotFound() throws Exception {
             .andExpect(jsonPath("$.age", is(20)));
         }
 
-        verify(<%= nounLowercase %>Service, atLeastOnce()).update(original);
+        verify(<%= nounLowercase %>Service, atLeastOnce()).update("99", original);
         }
 
     @Test

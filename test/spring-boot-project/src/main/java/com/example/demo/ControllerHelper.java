@@ -19,7 +19,7 @@ public class ControllerHelper {
      * Generate a HTTP ResponseEntity from the HttpEntity's body and header; and add in a calculated HTTP Status
      *
      * @param <T>              the type parameter
-     * @param httpEntity               HttpEntity with (optional) body and (optional) headers
+     * @param httpEntity       HttpEntity with (optional) body and (optional) headers
      * @param statusWhenNoBody status to populate if a body not available at this time
      * @return ResponseEntity for sending on the wire
      */

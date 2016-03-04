@@ -37,7 +37,7 @@ class PersonController {
     private static final String COLON = "\': ";
 
     @Autowired
-    private PersonServiceAsynch personService;
+    private PersonService personService;
 
     @RequestMapping(value = "/people", method = RequestMethod.POST)
     public DeferredResult<ResponseEntity<Person>> create(@RequestBody @Valid Person person) {

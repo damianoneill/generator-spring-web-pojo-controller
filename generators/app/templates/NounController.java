@@ -29,7 +29,7 @@ import static <%= packageName %>.ControllerHelper.toResponseEntity;
  * This code is auto-generated do not override, instead raise a feature request against the generator tool.
  */
 @RestController
-public class <%= noun %>Controller {
+class <%= noun %>Controller {
 
     private static final String NOT_AVAILABLE = "Not Available";
     private static final String FIELD_ERROR_IN_OBJECT = "Field error in object \'";
@@ -84,11 +84,11 @@ public class <%= noun %>Controller {
         return result;
     }
 
-    @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.PUT)
-    public DeferredResult<ResponseEntity<<%= noun %>>> update(@RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
+    @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.PUT)
+    public DeferredResult<ResponseEntity<<%= noun %>>> update(@PathVariable("id") <%= type %> id, @RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
         DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
 
-        <%= nounLowercase %>Service.update(<%= nounLowercase %>).subscribe(
+        <%= nounLowercase %>Service.update(id, <%= nounLowercase %>).subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
         return result;
 

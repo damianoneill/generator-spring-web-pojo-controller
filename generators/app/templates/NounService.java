@@ -11,7 +11,7 @@ import java.util.List;
  * The <%= noun %> service class, this should be implemented by the user of the tool.
  */
 @Service
-public class <%= noun %>Service {
+class <%= noun %>Service {
 
     /**
      * Create an <%= noun %>.
@@ -46,10 +46,11 @@ public class <%= noun %>Service {
     /**
      * Update an <%= noun %>.
      *
+     * @param id the id
      * @param <%= nounLowercase %> the <%= nounLowercase %>
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> update(<%= noun %> <%= nounLowercase %>) {
+    public Observable<HttpEntity<<%= noun %>>> update(<%= type %> id, <%= noun %> <%= nounLowercase %>) {
         throw new UnsupportedOperationException();
     }
 
