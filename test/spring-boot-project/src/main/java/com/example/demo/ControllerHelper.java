@@ -16,23 +16,23 @@ public class ControllerHelper {
     }
 
     /**
-     * Generate a ResponseEntity from the HttpEntity's body and header; and add in a status
+     * Generate a HTTP ResponseEntity from the HttpEntity's body and header; and add in a calculated HTTP Status
      *
      * @param <T>              the type parameter
-     * @param he               HttpEntity with (optional) body and (optional) headers
+     * @param httpEntity               HttpEntity with (optional) body and (optional) headers
      * @param statusWhenNoBody status to populate if a body not available at this time
      * @return ResponseEntity for sending on the wire
      */
-    public static <T> ResponseEntity<T> toResponseEntity(HttpEntity<T> he, HttpStatus statusWhenNoBody) {
+    public static <T> ResponseEntity<T> toResponseEntity(HttpEntity<T> httpEntity, HttpStatus statusWhenNoBody) {
         return new ResponseEntity<>(
-                he.getBody(),
-                he.getHeaders(),
-                he.getBody() == null ? statusWhenNoBody : HttpStatus.OK
+                httpEntity.getBody(),
+                httpEntity.getHeaders(),
+                httpEntity.getBody() == null ? statusWhenNoBody : HttpStatus.OK
         );
     }
 
     /**
-     * To ok response entity response entity.
+     * To a 200 OK HTTP ResponseEntity
      *
      * @param <T>     the type parameter
      * @param body    the body

@@ -58,7 +58,7 @@ public class PersonControllerTestDocumentation {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
-    private PersonService personService;
+    private PersonServiceAsynch personService;
 
     @InjectMocks
     private PersonController controller;
@@ -159,7 +159,7 @@ final Person expected = new Person();
 
 @Test
 public void findOnePersonNotFound() throws Exception {
-        when(personService.findOne(any(String.class))).thenReturn(Observable.just(new HttpEntity(null)));
+        when(personService.findOne(any(String.class))).thenReturn(Observable.just(new HttpEntity<>(null, null)));
 
         MvcResult mvcResult = this.mockMvc.perform(get(PATH + "/{id}", "1234"))
         .andExpect(status().isOk())

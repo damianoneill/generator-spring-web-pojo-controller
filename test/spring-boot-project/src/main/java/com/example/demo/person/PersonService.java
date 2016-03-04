@@ -11,7 +11,7 @@ import java.util.List;
  * The Person service class, this should be implemented by the user of the tool.
  */
 @Service
-public class PersonService {
+class PersonService {
 
     /**
      * Create an Person.
