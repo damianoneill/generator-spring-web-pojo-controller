@@ -29,7 +29,7 @@ import static com.example.demo.ControllerHelper.toResponseEntity;
  * This code is auto-generated do not override, instead raise a feature request against the generator tool.
  */
 @RestController
-public class PersonController {
+class PersonController {
 
     private static final String NOT_AVAILABLE = "Not Available";
     private static final String FIELD_ERROR_IN_OBJECT = "Field error in object \'";
@@ -37,7 +37,9 @@ public class PersonController {
     private static final String COLON = "\': ";
 
     @Autowired
+
     private PersonService personService;
+
 
     @RequestMapping(value = "/people", method = RequestMethod.POST)
     public DeferredResult<ResponseEntity<Person>> create(@RequestBody @Valid Person person) {
