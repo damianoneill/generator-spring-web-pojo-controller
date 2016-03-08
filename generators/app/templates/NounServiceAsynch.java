@@ -30,11 +30,11 @@ class <%= noun %>ServiceAsynch {
             Executors.newFixedThreadPool(10, new CustomizableThreadFactory("<%= noun %>"));
 
 
-    // Just for illustrative purposes; A task 'service' will be used instead
+    // Just for illustrative purposes; A task 'service' should be used instead
     private final AtomicInteger id = new AtomicInteger(1);
 
     private String genDummyId() {
-        // for illustrative purposes; A task 'service' will be used instead
+        // for illustrative purposes; A task 'service' should be used instead
         return Integer.toString(id.getAndIncrement());
     }
 
