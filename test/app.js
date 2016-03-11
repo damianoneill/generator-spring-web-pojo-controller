@@ -22,7 +22,7 @@ describe('generator-spring-web-pojo-controller:app', function () {
       'com/example/demo/person/PersonController.java'
     ]);
     assert.file([
-      'com/example/demo/person/PersonService.java'
+      'com/example/demo/person/PersonServiceAsynch.java'
     ]);
     assert.file([
       'com/example/demo/person/PersonControllerTestDocumentation.java'

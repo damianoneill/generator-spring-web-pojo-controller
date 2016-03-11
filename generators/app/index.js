@@ -27,12 +27,12 @@ module.exports = yeoman.generators.Base.extend({
       message: 'What\'s the type (if primitive, use its wrapper class) of the variable used as an identifier in the noun?',
       store: true,
       default: 'String'
-     }, {
-            type: 'confirm',
-            name: 'asynchYesNo',
-            message: 'Would you like to generate a asynchronous (i.e. task based) REST service instead of a synchronous one.'
-             + '(Note: Both variant still use rx-java asynch flow.)',
-            store: true
+    }, {
+      type: 'confirm',
+      name: 'asynchYesNo',
+      message: 'Would you like to generate a asynchronous (i.e. task based) REST service instead of a synchronous one.' +
+      '(Note: Both variant still use rx-java asynch flow.)',
+      store: true
     }, {
       type: 'confirm',
       name: 'filterYesNo',
@@ -120,8 +120,8 @@ module.exports = yeoman.generators.Base.extend({
       }
     );
 
-    if (this.properties.asynchYesNo){
-        this.fs.copyTpl(
+    if (this.properties.asynchYesNo) {
+      this.fs.copyTpl(
           this.templatePath('NounServiceAsynch.java'),
           this.destinationPath(srcDir + packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'ServiceAsynch.java'), {
             packageName: this.properties.packageName,
@@ -133,7 +133,7 @@ module.exports = yeoman.generators.Base.extend({
           }
         );
     } else {
-        this.fs.copyTpl(
+      this.fs.copyTpl(
           this.templatePath('NounService.java'),
           this.destinationPath(srcDir + packagePath + '/' + nounLowercase + '/' + this.properties.noun + 'Service.java'), {
             packageName: this.properties.packageName,
