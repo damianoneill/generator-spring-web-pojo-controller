@@ -10,20 +10,20 @@ import java.util.List;
 /**
  * Helper class for Controllers.
  */
-public class ControllerHelper {
+public final class ControllerHelper {
 
     private ControllerHelper() {
     }
 
     /**
-     * Generate a HTTP ResponseEntity from the HttpEntity's body and header; and add in a calculated HTTP Status
+     * Generate a HTTP ResponseEntity from the HttpEntity's body and header; and add in a calculated HTTP Status.
      *
      * @param <T>              the type parameter
      * @param httpEntity       HttpEntity with (optional) body and (optional) headers
      * @param statusWhenNoBody status to populate if a body not available at this time
      * @return ResponseEntity for sending on the wire
      */
-    public static <T> ResponseEntity<T> toResponseEntity(HttpEntity<T> httpEntity, HttpStatus statusWhenNoBody) {
+    public static <T> ResponseEntity<T> toResponseEntity(final HttpEntity<T> httpEntity, final HttpStatus statusWhenNoBody) {
         return new ResponseEntity<>(
                 httpEntity.getBody(),
                 httpEntity.getHeaders(),
@@ -32,14 +32,14 @@ public class ControllerHelper {
     }
 
     /**
-     * To a 200 OK HTTP ResponseEntity
+     * To a 200 OK HTTP ResponseEntity.
      *
      * @param <T>     the type parameter
      * @param body    the body
      * @param headers the headers
      * @return the response entity
      */
-    public static <T> ResponseEntity<List<T>> toOkResponseEntity(List<T> body, HttpHeaders headers) {
+    public static <T> ResponseEntity<List<T>> toOkResponseEntity(final List<T> body, final HttpHeaders headers) {
         return new ResponseEntity<>(
                 body,
                 headers,

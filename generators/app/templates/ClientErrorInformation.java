@@ -17,7 +17,7 @@ public class ClientErrorInformation implements Serializable {
      * @param exception  the exception
      * @param requestURI the request uri
      */
-    public ClientErrorInformation(String exception, String requestURI) {
+    public ClientErrorInformation(final String exception, final String requestURI) {
         this.exception = exception;
         this.requestURI = requestURI;
     }

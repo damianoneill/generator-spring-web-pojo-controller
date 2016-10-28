@@ -19,7 +19,7 @@ class <%= noun %>Service {
      * @param <%= nounLowercase %> the <%= nounLowercase %> to create
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> create(<%= noun %> <%= nounLowercase %>) {
+    public Observable<HttpEntity<<%= noun %>>> create(final <%= noun %> <%= nounLowercase %>) {
         // Return entity with a body if request has been fully handled.
         throw new UnsupportedOperationException();
     }
@@ -30,7 +30,7 @@ class <%= noun %>Service {
      * @param id the id
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> findOne(<%= type %> id) {
+    public Observable<HttpEntity<<%= noun %>>> findOne(final <%= type %> id) {
         throw new UnsupportedOperationException();
     }
 
@@ -50,7 +50,7 @@ class <%= noun %>Service {
      * @param <%= nounLowercase %> the <%= nounLowercase %>
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> update(<%= type %> id, <%= noun %> <%= nounLowercase %>) {
+    public Observable<HttpEntity<<%= noun %>>> update(final <%= type %> id, final <%= noun %> <%= nounLowercase %>) {
         throw new UnsupportedOperationException();
     }
 
@@ -60,7 +60,7 @@ class <%= noun %>Service {
      * @param id the id
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> delete(<%= type %> id) {
+    public Observable<HttpEntity<<%= noun %>>> delete(final <%= type %> id) {
         throw new UnsupportedOperationException();
     }
 

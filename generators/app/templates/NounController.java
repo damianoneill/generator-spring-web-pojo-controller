@@ -44,8 +44,8 @@ class <%= noun %>Controller {
 <%} %>
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>", method = RequestMethod.POST)
-    public DeferredResult<ResponseEntity<<%= noun %>>> create(@RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
-        DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
+    public DeferredResult<ResponseEntity<<%= noun %>>> create(@RequestBody @Valid final <%= noun %> <%= nounLowercase %>) {
+        final DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
 
         <%= nounLowercase %>Service.create(<%= nounLowercase %>).subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
@@ -54,7 +54,7 @@ class <%= noun %>Controller {
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.GET)
-    public DeferredResult<ResponseEntity<<%= noun %>>> findOne(@PathVariable("id") <%= type %> id) {
+    public DeferredResult<ResponseEntity<<%= noun %>>> findOne(@PathVariable("id") final <%= type %> id) {
         final DeferredResult<ResponseEntity<<%=noun%>>> result = new DeferredResult<>();
 
         <%=nounLowercase%>Service.findOne(id).subscribe(
@@ -78,7 +78,7 @@ class <%= noun %>Controller {
      * For e.g. http://localhost:8080/<%= nounLowercasePlural %>?page=0&size=2
      */
     @RequestMapping(value = "/<%= nounLowercasePlural %>", params = {"page", "size"}, method = RequestMethod.GET)
-    public DeferredResult<ResponseEntity<List<<%= noun %>>>> findPaginated(@RequestParam("page") long page, @RequestParam("size") long size) {
+    public DeferredResult<ResponseEntity<List<<%= noun %>>>> findPaginated(@RequestParam("page") final long page, @RequestParam("size") final long size) {
         final DeferredResult<ResponseEntity<List<<%= noun %>>>> result = new DeferredResult<>();
         <%= nounLowercase %>Service.findAll().subscribe(he -> {
             final List<<%= noun %>> pagedList = he.getBody().stream().skip(page * size).limit(size)
@@ -89,8 +89,8 @@ class <%= noun %>Controller {
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.PUT)
-    public DeferredResult<ResponseEntity<<%= noun %>>> update(@PathVariable("id") <%= type %> id, @RequestBody @Valid <%= noun %> <%= nounLowercase %>) {
-        DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
+    public DeferredResult<ResponseEntity<<%= noun %>>> update(@PathVariable("id") final <%= type %> id, @RequestBody @Valid final <%= noun %> <%= nounLowercase %>) {
+        final DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
 
         <%= nounLowercase %>Service.update(id, <%= nounLowercase %>).subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
@@ -99,8 +99,8 @@ class <%= noun %>Controller {
     }
 
     @RequestMapping(value = "/<%= nounLowercasePlural %>/{id}", method = RequestMethod.DELETE)
-    public DeferredResult<ResponseEntity<<%= noun %>>> delete(@PathVariable("id") <%= type %> id) {
-        DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
+    public DeferredResult<ResponseEntity<<%= noun %>>> delete(@PathVariable("id") final <%= type %> id) {
+        final DeferredResult<ResponseEntity<<%= noun %>>> result = new DeferredResult<>();
         <%= nounLowercase %>Service.delete(id).subscribe(
                 he -> result.setResult(toResponseEntity(he, HttpStatus.ACCEPTED)), result::setErrorResult);
         return result;
@@ -115,20 +115,20 @@ class <%= noun %>Controller {
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
-    public ResponseEntity<ClientErrorInformation> handleUnsupportedOperation(HttpServletRequest req, Exception e) {
-        ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
+    public ResponseEntity<ClientErrorInformation> handleUnsupportedOperation(final HttpServletRequest req, final Exception e) {
+        final ClientErrorInformation error = new ClientErrorInformation(e.toString(), req.getRequestURI());
         return new ResponseEntity<>(error, HttpStatus.NOT_IMPLEMENTED);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ClientErrorInformation> handleMethodArgumentNotValid(HttpServletRequest req, MethodArgumentNotValidException e) {
+    public ResponseEntity<ClientErrorInformation> handleMethodArgumentNotValid(final HttpServletRequest req, final MethodArgumentNotValidException e) {
         String message = NOT_AVAILABLE;
-        FieldError fieldError = e.getBindingResult().getFieldErrors().get(0);
+        final FieldError fieldError = e.getBindingResult().getFieldErrors().get(0);
         if (fieldError != null) {
             message = FIELD_ERROR_IN_OBJECT + fieldError.getObjectName() + ON_FIELD + fieldError.getField() + COLON +
                     fieldError.getDefaultMessage();
         }
-        ClientErrorInformation error = new ClientErrorInformation(message, req.getRequestURI());
+        final ClientErrorInformation error = new ClientErrorInformation(message, req.getRequestURI());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

@@ -3,7 +3,7 @@
      * For e.g. http://localhost:8080/<%= nounLowercasePlural %>?filter=...
      */
     @RequestMapping(value = "/<%= nounLowercasePlural %>", params = {"filter"}, method = RequestMethod.GET)
-    public DeferredResult<ResponseEntity<List<<%= noun %>>>> findFiltered(@RequestParam("filter") String filter) {
+    public DeferredResult<ResponseEntity<List<<%= noun %>>>> findFiltered(@RequestParam("filter") final String filter) {
 
         final DeferredResult<ResponseEntity<List<<%= noun %>>>> result = new DeferredResult<>();
         <%= nounLowercase %>Service.findAll().subscribe(item -> {

@@ -44,7 +44,7 @@ class <%= noun %>ServiceAsynch {
      * @param <%= nounLowercase %> the <%= nounLowercase %> to create
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> create(<%= noun %> <%= nounLowercase %>) {
+    public Observable<HttpEntity<<%= noun %>>> create(final <%= noun %> <%= nounLowercase %>) {
         return Observable.<HttpEntity<<%= noun %>>>create(sub -> {
             try {
                 String taskId = genDummyId();
@@ -63,7 +63,7 @@ class <%= noun %>ServiceAsynch {
      * @param id the id
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> findOne(<%= type %> id) {
+    public Observable<HttpEntity<<%= noun %>>> findOne(final <%= type %> id) {
         return Observable.<HttpEntity<<%= noun %>>>create(sub -> {
             try {
                 sub.onNext(findOne<%= noun %>(id));
@@ -98,7 +98,7 @@ class <%= noun %>ServiceAsynch {
      * @param <%= nounLowercase %> the <%= nounLowercase %>
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> update(<%= type %> id, <%= noun %> <%= nounLowercase %>) {
+    public Observable<HttpEntity<<%= noun %>>> update(final <%= type %> id, final <%= noun %> <%= nounLowercase %>) {
 
 
         return Observable.<HttpEntity<<%= noun %>>>create(sub -> {
@@ -119,7 +119,7 @@ class <%= noun %>ServiceAsynch {
      * @param id the id
      * @return an observable that emits a non-null HttpEntity.
      */
-    public Observable<HttpEntity<<%= noun %>>> delete(<%= type %> id) {
+    public Observable<HttpEntity<<%= noun %>>> delete(final <%= type %> id) {
 
         return Observable.<HttpEntity<<%= noun %>>>create(sub -> {
             try {
@@ -205,7 +205,7 @@ class <%= noun %>ServiceAsynch {
         );
     }
 
-    private static HttpEntity<<%= noun %>> findOne<%= noun %>(<%= type %> id) {
+    private static HttpEntity<<%= noun %>> findOne<%= noun %>(final <%= type %> id) {
         // TODO application logic needed
         LOG.info("Find for id {} ...", id);
         return new HttpEntity<>(new <%= noun %>());
